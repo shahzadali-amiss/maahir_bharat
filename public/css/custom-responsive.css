@@ -1,0 +1,26 @@
+.login-ancher-tag{
+	position: relative;
+	top: 0;
+	left: 0;
+	text-decoration: none;
+}
+.product-thumb .addcart{
+	background: #da4f49!important;
+	color: #fff!important;
+}
+.sup-menu-button{
+	padding: 10px 12px!important;
+	background: #000;
+
+}
+@media (max-width: 480px){
+	.sup-button{
+		display: none!important;
+	}
+
+}
+@media (min-width: 480px){
+	.sup-menu-button{
+		display: none!important;
+	}
+}
