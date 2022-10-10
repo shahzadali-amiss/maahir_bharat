@@ -5,7 +5,7 @@
             <div class="d-md-flex align-items-center">
               <!-- <div class="img-thumbnail rounded-circle position-relative flex-shrink-0 mx-auto mb-2 mx-md-0 mb-md-0" style="width: 6.375rem;"><span class="badge bg-warning position-absolute end-0 mt-n2" data-bs-toggle="tooltip" title="Reward points">384</span><img class="rounded-circle" src="{{asset('img/shop/account/avatar.jpg')}}" alt="Susan Gardner"></div> -->
               <div class="ps-md-3">
-                <h3 class="fs-base mb-0">{{  Session::get('customer.name')  }}</h3><span class="text-accent fs-sm">{{  Session::get('customer.email') }}</span>
+                <h3 class="fs-base mb-0">{{  Auth::user()->name  }}</h3><span class="text-accent fs-sm">{{  Auth::user()->email }}</span>
               </div>
             </div><a class="btn btn-primary d-lg-none mb-2 mt-3 mt-md-0" href="#account-menu" data-bs-toggle="collapse" aria-expanded="false"><i class="ci-menu me-2"></i>Account menu</a>
           </div>

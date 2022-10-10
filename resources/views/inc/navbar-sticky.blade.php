@@ -7,8 +7,9 @@
       <a class="navbar-brand d-md-none me-2" href="{{route('guest-home')}}">
         <img src="{{asset('img/logo-dark.png')}}" width="90" alt="Mahir Bharat">
       </a>
+      
       <!-- Search-->
-      <div class="input-group d-none d-lg-flex flex-nowrap mx-4"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+      <!-- <div class="input-group d-none d-lg-flex flex-nowrap mx-4"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
         <input class="form-control rounded-start w-100" type="text" placeholder="Search for products">
         <select class="form-select flex-shrink-0" style="width: 11.5rem;">
           
@@ -18,7 +19,64 @@
           @endforeach
           
         </select>
+      </div> -->
+
+      <div class="input-group d-none d-lg-flex flex-nowrap mx-4">
+      <!-- Departments menu-->
+        <ul class="navbar-nav navbar-mega-nav pe-lg-2 me-lg-2">
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle ps-lg-0" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside"><i class="ci-menu align-middle mt-n1 me-2"></i>Categories</a>
+            <ul class="dropdown-menu">
+              @foreach($grands as $gc)
+              <li class="dropdown mega-dropdown"><a class="dropdown-item dropdown-toggle" href="{{ route('products', $gc->id) }}" data-bs-toggle="dropdown"><!-- <i class="{{getGrandCategoryIcon($gc->id)}} opacity-60 fs-lg mt-n1 me-2"></i> -->
+              {{ucwords($gc->name)}}</a>
+                <div class="dropdown-menu p-0">
+                  <div class="d-flex flex-wrap flex-sm-nowrap px-2">
+                    @foreach($gc->childs as $pc)
+
+                    <div class="mega-dropdown-column py-4 px-3">
+                      <div class="widget widget-links">
+                        <a href="{{ route('products', [$gc->id, $pc->id]) }}"><h6 class="fs-base mb-3">{{ucwords($pc->name)}}</h6></a>
+                        <ul class="widget-list">
+                          @foreach($pc->childs as $cc)
+                          <li class="widget-list-item pb-1">
+                            <a class="widget-list-link" href="{{ route('products', [$gc->id, $pc->id, $cc->id]) }}">
+                              {{ucwords($cc-> name)}}
+                            </a>
+                          </li>
+                          @endforeach
+
+                        </ul>
+                      </div>
+                    </div>
+
+                    @endforeach                                                       
+
+                    <div class="mega-dropdown-column d-none d-lg-block py-4 text-center"><a class="d-block mb-2" href="#"><img src="{{asset('img/shop/departments/07.jpg')}}" alt="Computers &amp; Accessories"></a>
+                      <div class="fs-sm mb-3">Starting from <span class='fw-medium'>$149.<small>80</small></span></div><a class="btn btn-primary btn-shadow btn-sm" href="#">See offers<i class="ci-arrow-right fs-xs ms-1"></i></a>
+                    </div>
+
+                  </div>
+                </div>
+              </li>
+              @endforeach
+            
+            </ul>
+          </li>
+        </ul>
+        <!-- Primary menu-->
+        <ul class="navbar-nav ps-md-2 ms-md-1">
+          <li class="nav-item active"><a class="nav-link" href="{{route('guest-home')}}">Home</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('all-products') }}">New Arrivals</a>
+          </li>
+         <!--  <li class="nav-item"><a class="nav-link" href="{{ route('all-products') }}">Best Sellers</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('all-products') }}">Exclusive Offers</a>
+          </li> -->  
+        </ul>
+
       </div>
+
       <!-- Toolbar-->
       <div class="navbar-toolbar d-flex flex-shrink-0 align-items-center">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -30,13 +88,13 @@
             <i class="navbar-tool-icon ci-menu"></i>
           </div>
         </a>
-        @if(Session::has('customer'))
+        @if(Auth::check())
         <div class="navbar-tool dropdown ms-2">
           <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" href="{{route('home')}}">
             <i class="navbar-tool-icon ci-user"></i>
           </a>
           <a class="navbar-tool-text" href="#">
-            <small>Hello, {{explode(' ',Session::get('customer.name'))[0]}}</small>
+            <small>Hello, {{ explode(' ', Auth::user()->name)[0] }}</small>
             My Account
           </a>
           <!-- Cart dropdown-->
@@ -97,18 +155,18 @@
         </div>
         @else
         <div class="navbar-tool ms-2">
-          <a class="navbar-tool-icon-box bg-secondary" href="{{route('customer_login')}}">
+          <a class="navbar-tool-icon-box bg-secondary" href="{{route('login')}}">
             <i class="navbar-sign-in ci-sign-in"></i>
           </a>
-          <a class="navbar-tool-text" href="{{route('customer_login')}}">
+          <a class="navbar-tool-text" href="{{route('login')}}">
             Login
           </a>
         </div>
         <div class="navbar-tool ms-2">
-          <a class="navbar-tool-icon-box bg-secondary" href="{{route('customer_register')}}">
+          <a class="navbar-tool-icon-box bg-secondary" href="{{route('register')}}">
             <i class="navbar-tool-icon ci-add-user"></i>
           </a>
-          <a class="navbar-tool-text" href="{{route('customer_register')}}">
+          <a class="navbar-tool-text" href="{{route('register')}}">
             Register
           </a>
         </div>
@@ -119,10 +177,14 @@
   <div class="navbar navbar-expand-lg navbar-light navbar-stuck-menu mt-n2 pt-0 pb-2">
     <div class="container">
       <div class="collapse navbar-collapse" id="navbarCollapse">
+        
         <!-- Search-->
-        <div class="input-group d-lg-none my-3"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+        <!-- <div class="input-group d-lg-none my-3"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
           <input class="form-control rounded-start" type="text" placeholder="Search for products">
-        </div>
+        </div> -->
+        
+        {{--
+        <!-- ONLY FOR MOBILE MENU -->
         <!-- Departments menu-->
         <ul class="navbar-nav navbar-mega-nav pe-lg-2 me-lg-2">
           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle ps-lg-0" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside"><i class="ci-menu align-middle mt-n1 me-2"></i>Categories</a>
@@ -155,6 +217,7 @@
                     <div class="mega-dropdown-column d-none d-lg-block py-4 text-center"><a class="d-block mb-2" href="#"><img src="{{asset('img/shop/departments/07.jpg')}}" alt="Computers &amp; Accessories"></a>
                       <div class="fs-sm mb-3">Starting from <span class='fw-medium'>$149.<small>80</small></span></div><a class="btn btn-primary btn-shadow btn-sm" href="#">See offers<i class="ci-arrow-right fs-xs ms-1"></i></a>
                     </div>
+
                   </div>
                 </div>
               </li>
@@ -172,10 +235,12 @@
          <!--  <li class="nav-item"><a class="nav-link" href="{{ route('all-products') }}">Best Sellers</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="{{ route('all-products') }}">Exclusive Offers</a>
-          </li> -->
-          
+          </li> -->  
         </ul>
-        <div class="col py-md-2 text-end"><a class="btn btn-primary btn-shadow rounded-pill" href="{{ route('become-a-supplier') }}">Become a Supplier</a></div>
+        
+        <!-- <div class="col py-md-2 text-end"><a class="btn btn-primary btn-shadow rounded-pill" href="{{ route('become-a-supplier') }}">Become a Supplier</a></div> -->
+        --}}
+
       </div>
     </div>
   </div>

@@ -20,31 +20,15 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function ($request, $next){
-            if(!Session::has('customer')){
-                return redirect()->route('customer_login');
-            }
-        return $next($request);
-        });
     }
+
     public function index(Request $request){
         if($request->isMethod('get')){
             $data = $this->getAllData();
             $data['page'] = 'Profile';
             return view('customer.profile', $data);
         }else{
-            if(!Session::has('customer.email')){
-                $request->validate([
-                    'email' => 'required|email',
-                ]);
-            }else{
-                if(!is_null($request->email)){
-                    $request->validate([
-                        'email' => 'email',
-                    ]);
-                }
-            }
-           
+            
             if($request->has('password')){
                 $request->validate([
                     'password' => ['required', Rules\Password::defaults()],
@@ -55,7 +39,7 @@ class HomeController extends Controller
                 }
             }
             
-            $user=User::find(Session::get('customer.id'));
+            $user=User::find(Auth::user()->id);
             if($user){
                 if(!is_null($request->email)){
                     $user->email=$request->email;
@@ -87,7 +71,7 @@ class HomeController extends Controller
     public function address(Request $request){
         if($request->isMethod('get')){
             $data = $this->getAllData();
-            $address=Address::where('role_id', Session::get('customer.id'))->first();
+            $address=Address::where('role_id', Auth::user()->id)->first();
             $data['states']=State::where(['status'=>true])->get();
             if($address){
                 $data['address']=$address;
@@ -101,6 +85,7 @@ class HomeController extends Controller
                 'area' => 'required',
                 'landmark' => 'required',
                 'zipcode' => 'required|numeric',
+                'mobile' => 'required',
             ]);
 
             if(is_null($request->is_update)){
@@ -109,12 +94,10 @@ class HomeController extends Controller
                 $address = Address::find($request->is_update);
             }
             $address->type='delivery';
-            $address->role_id=Session::get('customer.id');
-            $address->name=Session::get('customer.name');
-            $address->mobile=Session::get('customer.mobile');
-            if(Session::has('customer.email')){
-                $address->email=Session::get('customer.email');
-            }
+            $address->role_id=Auth::user()->id;
+            $address->name=Auth::user()->name;
+            $address->mobile=$request->mobile;
+            $address->email=Auth::user()->email;
             $address->house=$request->house;
             $address->area=$request->area;
             $address->landmark=$request->landmark;
@@ -148,7 +131,7 @@ class HomeController extends Controller
         if($product){
             $order=new Order();
             $order->product_id=$product->id;
-            $order->user_id=Session::get('customer.id');
+            $order->user_id=Auth::user()->id;
             $order->quantity=$request->quantity;
             $order->attributes=json_encode($request->attribute);
             $order->final_price=$product->offer_price;
@@ -186,13 +169,13 @@ class HomeController extends Controller
         }
     }
     public function checkoutDetails(Request $request){
-        $orderStatus = Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+        $orderStatus = Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
         // dd($orderStatus);
         if($orderStatus->isEmpty())
             return redirect()->route('home');
         if($request->isMethod('get')){
             $data = $this->getAllData();
-            $address=Address::where('role_id', Session::get('customer.id'))->first();
+            $address=Address::where('role_id', Auth::user()->id)->first();
             $data['states']=State::where(['status'=>true])->get();
             if($address){
                 $data['address']=$address;    
@@ -216,7 +199,7 @@ class HomeController extends Controller
                 $address = Address::find($request->is_update);
             }
             $address->type='delivery';
-            $address->role_id=Session::get('customer.id');
+            $address->role_id=Auth::user()->id;
             $address->name=$request->name;
             $address->email=$request->email;
             $address->mobile=$request->mobile;
@@ -236,7 +219,7 @@ class HomeController extends Controller
     }
 
     public function checkoutShipping(Request $request){
-        $orderStatus = Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+        $orderStatus = Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
         // dd($orderStatus);
         if($orderStatus->isEmpty())
             return redirect()->route('home');
@@ -249,7 +232,7 @@ class HomeController extends Controller
     }
 
     public function checkoutReview(Request $request){
-        $orderStatus = Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+        $orderStatus = Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
         if($orderStatus->isEmpty())
             return redirect()->route('home');
         if($request->isMethod('get')){
@@ -259,10 +242,10 @@ class HomeController extends Controller
     }
 
     public function prePayment(Request $request){
-        $orderStatus = Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+        $orderStatus = Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
         if($orderStatus->isEmpty())
             return redirect()->route('home');
-        // dd(Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get());
+        // dd(Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => true])->get());
         // dd($request->all());
         if($request->isMethod('get')){
             $data = $this->getAllData();
@@ -275,11 +258,11 @@ class HomeController extends Controller
                 ]);
                 // dd($request->all());
                 
-                $orders=Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+                $orders=Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
                 if(!$orders->isEmpty()){
                     $payment= new Payment();
                     $pmt_id=uniqid('OR');
-                    $payment->user_id=Session::get('customer.id');
+                    $payment->user_id=Auth::user()->id;
                     $payment->pmt_id=$pmt_id;
                     $payment->pmt_type=$request->payment_type;
                     //Remove this when gateway start
@@ -289,7 +272,7 @@ class HomeController extends Controller
                     $i=0;
                     $temp='';
 
-                    $address=Address::where(['role_id'=>Session::get('customer.id'), 'type'=>'delivery'])->first();
+                    $address=Address::where(['role_id'=>Auth::user()->id, 'type'=>'delivery'])->first();
                     foreach($orders as $key => $order){
                         if(!in_array(getProductSupplier($order->product_id), $suppliers)){
                             $suppliers[$i]=getProductSupplier($order->product_id);
@@ -333,7 +316,7 @@ class HomeController extends Controller
         if($request->isMethod('get')){
             $response=true;
             if($response==true){
-                $orders=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+                $orders=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
                 foreach ( $orders as $key => $order ) {
                     $order->is_in_cart=false;
                     $order->status='pending';
@@ -368,7 +351,7 @@ class HomeController extends Controller
     }
 
     public function deleteCartProduct($id){
-        $order=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true, 'product_id' => $id ])->first();
+        $order=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $id ])->first();
         if($order->delete()){
             return back()->with('success', 'Product removed from cart successfully');
         }else{

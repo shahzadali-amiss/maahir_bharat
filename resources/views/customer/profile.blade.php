@@ -21,7 +21,7 @@
     <div class="row gx-4 gy-3">
       <div class="col-sm-12">
         <label class="form-label" for="account-fn">Full Name</label>
-        <input class="form-control" type="text" id="account-fn" value="{{ Session::get('customer.name') }}" disabled>
+        <input class="form-control" type="text" id="account-fn" value="{{ Auth::user()->name }}" disabled>
       </div>
       <!-- <div class="col-sm-6">
         <label class="form-label" for="account-ln">Last Name</label>
@@ -29,16 +29,16 @@
       </div> -->
       <div class="col-sm-6">
         <label class="form-label" for="account-email">Email Address</label>
-        <input class="form-control" type="email" name="email" id="account-email" value="{{  Session::get('customer.email') }}{{old('email')}}">
+        <input class="form-control" type="email" name="email" id="account-email" disabled value="{{  Auth::user()->email }}">
       </div>
       <div class="col-sm-6">
         <label class="form-label" for="account-phone">Phone Number</label>
-        <input class="form-control" type="text" id="account-phone" value="{{  Session::get('customer.mobile') }}" disabled>
+        <input class="form-control" type="text" id="account-phone" value="{{  Auth::user()->mobile }}">
       </div>
       <div class="col-sm-12">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="for-password">
-          <label class="form-check-label" for="for-password">Update password also</label>
+          <label class="form-check-label" for="for-password">Change Password</label>
         </div>
       </div>
     </div>
