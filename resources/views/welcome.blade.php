@@ -218,19 +218,25 @@
                                             @php
                                               {{ $is_in_cart=false; }}
                                               @endphp
-                                              @foreach( getCartProducts() as $value )
-                                                @if($value->id==$product->id)
-                                                  @php
-                                                  {{ $is_in_cart=true;break; }}
-                                                  @endphp
-                                                @endif
-                                              @endforeach
+
+                                              @if(Auth::user())
+                                                  @foreach( getCartProducts() as $value )
+                                                    @if($value->id==$product->id)
+                                                      @php
+                                                      {{ $is_in_cart=true;break; }}
+                                                      @endphp
+                                                    @endif
+                                                  @endforeach
+                                              @endif
+                                              
                                               @if($is_in_cart)
                                                 <a class="addcart" href="{{ route('cart') }}">
                                                   Go to cart<i class="ci-arrow-right fs-lg me-2"></i>
                                                 </a>
                                               @else
-                                                <button type="submit" class="addcart" title="Add to Cart">Add to Cart</button>
+                                                <a href="{{ route('single', $product->id)}}" class="addcart d-none" title="Add to Cart" id="tocart">Add to Cart</a>
+
+                                                <button class="addcart" title="Add to Cart" onclick="event.preventDefault(); document.getElementById('tocart').click();">Add to Cart</button>
                                               @endif 
                                           </form>
                                       </div>

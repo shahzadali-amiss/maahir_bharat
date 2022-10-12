@@ -82,7 +82,7 @@
           <div class="col-sm-6">
             <div class="mb-3">
               <label class="form-label" for="checkout-fn">Name</label>
-              <input class="form-control" type="text" id="checkout-fn" name="name" value="{{ucwords( isset($address) ? $address->name : Session::get('customer.name'))}}" required>
+              <input class="form-control" type="text" id="checkout-fn" name="name" value="{{ucwords( isset($address) ? $address->name : Auth::user()->name)}}" required>
             </div>
           </div>
           <!-- <div class="col-sm-6">
@@ -94,7 +94,7 @@
           <div class="col-sm-6">
             <div class="mb-3">
               <label class="form-label" for="checkout-email">E-mail Address</label>
-              <input class="form-control" type="email" id="checkout-email" name="email" value="@if( isset($address) && Session::has('customer.email')){{$address->email}}@elseif(!isset($address) && Session::has('customer.email')){{Session::get('customer.email')}}@elseif(isset($address) && !Session::has('customer.email')){{$address->email}}@endif" required>
+              <input class="form-control" type="email" id="checkout-email" name="email" value="@if( isset($address) && Auth::user()->email){{$address->email}}@elseif(!isset($address) && Auth::user()->email){{Auth::user()->email}}@elseif(isset($address) && !Auth::user()->email){{$address->email}}@endif" required>
             </div>
           </div>
         </div>
@@ -124,7 +124,7 @@
           <div class="col-sm-6">
             <div class="mb-3">
               <label class="form-label" for="checkout-phone">Mobile Number</label>
-              <input class="form-control" type="text" id="checkout-phone" name="mobile" value="{{ isset($address) ? $address->mobile : Session::get('customer.mobile') }}" required>
+              <input class="form-control" type="text" id="checkout-phone" name="mobile" value="{{ isset($address) ? $address->mobile : Auth::user()->mobile }}" required>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@
           <div class="col-sm-6">
             <div class="mb-3">
               <label class="form-label" for="checkout-state">State</label>
-              <select class="form-select" id="checkout-state" name="state" required="">
+              <select class="form-select" id="checkout-state" name="state" required="" style="font-size:unset;">
                 <option value="">Select state</option>
                 {{-- <option value="1">test state</option> --}}
                 @foreach($states as $state)
@@ -147,9 +147,9 @@
           <div class="col-sm-6">
             <div class="mb-3">
               <label class="form-label" for="checkout-city">City</label>
-              <select class="form-select" id="checkout-city" name="city" required="">
+              <select class="form-select" id="checkout-city" name="city" required="" style="font-size:unset;">
                 <option value="">Select city</option>
-                {{-- <option value="1">mzn</option> --}}
+                <option value="1">mzn</option> 
                 @if(isset($address))
                   <option value="{{$address->city}}" selected>{{ucwords(getCityName($address->city))}}</option>
                 @endif
@@ -260,7 +260,7 @@
         $.get(url, function(data, status){
           if(data.status==true){
             
-            //console.log(data.data);
+            console.log(data.data);
             bindParentCategory(data.data,'checkout-city');
           }    
         });

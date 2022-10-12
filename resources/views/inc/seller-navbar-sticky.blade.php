@@ -28,11 +28,11 @@
           <i class="navbar-tool-icon ci-heart"></i>
         </div>
       </a> -->
-
+      @if(Auth::user())
       @php
         $supplier_details=getSupplierDetails();
       @endphp
-      
+      @endif
       <div class="navbar-tool dropdown ms-2">
         <a class="navbar-tool-icon-box border dropdown-toggle" href="#" style="overflow: hidden;">
           
@@ -50,7 +50,7 @@
           @if(is_null(Session::get('supplier.name')))
             {{ explode('@',Session::get('supplier.email'))[0] }}
           @else
-            {{ucwords(Session::get('supplier.name'))}}
+            {{ucwords(Auth::user()->name)}}
           @endif
           </small>₹{{getSupplierEarning()}}
         </a>

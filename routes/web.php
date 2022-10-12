@@ -84,24 +84,27 @@ Route::get('shop/cart/delete-product/{id}', [HomeController::class, 'deleteCartP
 
 
 //SUPPLIER AUTH ROUTES
+Route::group(['middleware' => 'WhoU'], function(){
+    // dd('gdgysudjsfs');
 
-Route::get('supplier', [SellerController::class, 'index'])->name('seller-home');
-Route::get('supplier/upload-type', [SellerController::class, 'uploadType'])->name('seller-upload-type');
-Route::any('supplier/logout', [SellerController::class, 'logout'])->name('seller_logout');
-// Route::get('supplier/{page}', [SellerController::class, 'innerPages'])->name('supplier-pages');
-Route::any('supplier/products/choose-category/{type?}', [SellerController::class, 'chooseCategory'])->name('choose_category');
-Route::get('supplier/products', [SellerController::class, 'products'])->name('supplier_products');
-Route::any('supplier/products/add-product', [SellerController::class, 'addProduct'])->name('add-product');
-Route::any('supplier/products/edit-product/{id}', [SellerController::class, 'addProduct'])->name('edit-product');
-Route::any('supplier/products/delete-product/{id}', [Controller::class, 'deleteProduct'])->name('delete-product');
-Route::get('supplier/payouts', [SellerController::class, 'payouts'])->name('seller-payouts');
-Route::get('supplier/orders/{type}', [SellerController::class, 'orders'])->name('seller-orders');
-Route::post('supplier/move-to-complete-order', [SellerController::class, 'moveToCompleteOrder'])->name('move-to-complete-order');
-Route::any('supplier/my-account', [SellerController::class, 'account'])->name('seller-account');
-Route::get('supplier/settings', [SellerController::class, 'settings'])->name('seller-settings');
-Route::get('supplier/purchases', [SellerController::class, 'purchases'])->name('seller-purchases'); 
-Route::get('supplier/favorites', [SellerController::class, 'favorites'])->name('seller-favorites');
-Route::any('supplier/seller-change-password', [SellerController::class, 'changePassword'])->name('seller-change-password');
+    Route::get('supplier', [SellerController::class, 'index'])->name('seller-home');
+    Route::get('supplier/upload-type', [SellerController::class, 'uploadType'])->name('seller-upload-type');
+    Route::any('supplier/logout', [SellerController::class, 'logout'])->name('seller_logout');
+    // Route::get('supplier/{page}', [SellerController::class, 'innerPages'])->name('supplier-pages');
+    Route::any('supplier/products/choose-category/{type?}', [SellerController::class, 'chooseCategory'])->name('choose_category');
+    Route::get('supplier/products', [SellerController::class, 'products'])->name('supplier_products');
+    Route::any('supplier/products/add-product', [SellerController::class, 'addProduct'])->name('add-product');
+    Route::any('supplier/products/edit-product/{id}', [SellerController::class, 'addProduct'])->name('edit-product');
+    Route::any('supplier/products/delete-product/{id}', [Controller::class, 'deleteProduct'])->name('delete-product');
+    Route::get('supplier/payouts', [SellerController::class, 'payouts'])->name('seller-payouts');
+    Route::get('supplier/orders/{type}', [SellerController::class, 'orders'])->name('seller-orders');
+    Route::post('supplier/move-to-complete-order', [SellerController::class, 'moveToCompleteOrder'])->name('move-to-complete-order');
+    Route::any('supplier/my-account', [SellerController::class, 'account'])->name('seller-account');
+    Route::get('supplier/settings', [SellerController::class, 'settings'])->name('seller-settings');
+    Route::get('supplier/purchases', [SellerController::class, 'purchases'])->name('seller-purchases'); 
+    Route::get('supplier/favorites', [SellerController::class, 'favorites'])->name('seller-favorites');
+    Route::any('supplier/seller-change-password', [SellerController::class, 'changePassword'])->name('seller-change-password');
+});
 
 //SUPPLIER AUTH ROUTES END
 

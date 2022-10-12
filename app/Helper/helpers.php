@@ -64,6 +64,7 @@ function getPrimaryAdBanners(){
 }
 
 function getSupplierDetails(){
+    
     return Supplier::where('role_id',Auth::user()->id)->first();
 }
 
@@ -111,7 +112,7 @@ function getImage($type, $type_id, $priority, $uid){
 }
 
 function getCartQuantity(){
-    $quantities=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+    $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
     
     $i=0;
     if($quantities->isEmpty()){
@@ -125,7 +126,7 @@ function getCartQuantity(){
 }
 
 function getCartProductQuantity($pid){
-    $quantities=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true, 'product_id' => $pid])->get();
+    $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $pid])->get();
     if(!$quantities->isEmpty())
         $i=$quantities[0]->quantity;
 
@@ -136,7 +137,7 @@ function getCartProductQuantity($pid){
 function getCartProductAttributes($pid){
     // dd(session()->get('supplier.id'));
     // dd(session()->all());   
-    $order=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true, 'product_id' => $pid])->get();
+    $order=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $pid])->get();
     $i=[];
     if(!$order->isEmpty()){
         $i=json_decode($order[0]->attributes);
@@ -147,7 +148,7 @@ function getCartProductAttributes($pid){
 
 
 function getCartProducts(){
-    $quantities=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+    $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
     if(!$quantities->isEmpty()){
         foreach ($quantities as $key => $quantity) {
             $products[$key]=Product::find($quantity->product_id);
@@ -159,7 +160,7 @@ function getCartProducts(){
 }
 
 function getCartSubTotal(){
-    $orders=Order::where([ 'user_id' => Session::get('customer.id'), 'is_in_cart' => true])->get();
+    $orders=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
     
     $i=0;
     if($orders->isEmpty()){
@@ -173,7 +174,7 @@ function getCartSubTotal(){
 }
 
 function getShippingAddress(){
-    $address=Address::where('role_id', Session::get('customer.id'))->first();
+    $address=Address::where('role_id', Auth::user()->id)->first();
     if($address){
         return $address;
     }else{
@@ -237,7 +238,7 @@ function getStateName($sid){
 }
 
 function getOrders(){
-    $orders=Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => false])->orderBy('id', 'desc')->paginate(10);
+    $orders=Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => false])->orderBy('id', 'desc')->paginate(10);
     if(!$orders->isEmpty()){
         return $orders;
     }else{
@@ -246,7 +247,7 @@ function getOrders(){
 }
 
 function getAllOrders(){
-    $orders=Order::where(['user_id' => Session::get('customer.id'), 'is_in_cart' => false])->get();
+    $orders=Order::where(['user_id' => Auth::user()->id, 'is_in_cart' => false])->get();
     if(!$orders->isEmpty()){
         return $orders;
     }else{

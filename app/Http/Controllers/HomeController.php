@@ -120,24 +120,30 @@ class HomeController extends Controller
     }
 
     public function addtocart(Request $request){
-        // dd($request->all());
-        $request->validate([
-            'product_id' => 'required|numeric',
-            'quantity' => 'required|numeric|min:1',
-        ]);       
-        $product=Product::find($request->product_id);
-        // dd(json_encode($request->attribute));
+        // dd($request->all(), Auth()->user());
+        if (Auth::user()) {
+            $request->validate([
+                'product_id' => 'required|numeric',
+                'quantity' => 'required|numeric|min:1',
+            ]);       
+            $product=Product::find($request->product_id);
+            // dd(json_encode($request->attribute));
+        }else{
+                return redirect()->route('login');
+            }
 
         if($product){
-            $order=new Order();
-            $order->product_id=$product->id;
-            $order->user_id=Auth::user()->id;
-            $order->quantity=$request->quantity;
-            $order->attributes=json_encode($request->attribute);
-            $order->final_price=$product->offer_price;
-            if($order->save()){
-                return back()->with('success', 'Product added to cart');
-            }
+                $order=new Order();
+                $order->product_id=$product->id;
+                $order->user_id=Auth::user()->id;
+                $order->quantity=$request->quantity;
+                $order->attributes=json_encode($request->attribute);
+                $order->final_price=$product->offer_price;
+                // dd($order);
+                if($order->save()){
+                    return back()->with('success', 'Product added to cart');
+                }
+            
         }
     }
 

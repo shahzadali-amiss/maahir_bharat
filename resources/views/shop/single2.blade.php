@@ -158,13 +158,16 @@
                     @php
                       {{ $is_in_cart=false; }}
                       @endphp
-                      @foreach( getCartProducts() as $value )
-                        @if($value->id==$product->id)
-                          @php
-                          {{ $is_in_cart=true;break; }}
-                          @endphp
-                        @endif
-                      @endforeach
+
+                      @if(Auth::user())
+                        @foreach( getCartProducts() as $value )
+                          @if($value->id==$product->id)
+                            @php
+                            {{ $is_in_cart=true;break; }}
+                            @endphp
+                          @endif
+                        @endforeach
+                      @endif  
 
                       @if($is_in_cart)
                         <a class="btn btn-primary btn-shadow d-block w-100" href="{{ route('cart') }}">

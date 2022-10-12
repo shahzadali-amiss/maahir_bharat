@@ -11,19 +11,35 @@ class WhoU
 {
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        $guards = empty($guards) ? [null] : $guards;
+        // $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
+        // foreach ($guards as $guard) {
+        //     if (Auth::guard($guard)->check()) {
                 
-                // dd(Auth::user());
-                // dd('working');
+        //         // dd(Auth::user());
+        //         // dd('working');
 
-                if(Auth::user()->role == 's')
-                    return redirect(RouteServiceProvider::SUPPLIER_HOME);
+        //         if(Auth::user()->role == 's'){
+        //             return redirect(RouteServiceProvider::SUPPLIER_HOME);
+        //         }else{
+        //             return redirect('/');
+        //         }
+        //     }
+        // }
+
+
+        if(Auth::check()){
+            if (Auth::user()->role == 's') {
+                return $next($request);
+            }else{
+                return redirect('/');
             }
+        }else{
+            return redirect('/login');
         }
 
         return $next($request);
     }
+
+
 }
