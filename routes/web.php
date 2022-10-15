@@ -64,21 +64,22 @@ Route::get('shop/products', [FrontController::class , 'allProducts'])->name('all
 
 
 //CUSTOMER AUTH ROUTES
+Route::group(['middleware' => 'CustomerAuth'], function(){
 
-Route::any('home', [HomeController::class, 'index'])->name('home');
-Route::any('logout', [HomeController::class, 'logout'])->name('logout');
-Route::any('home/address', [HomeController::class, 'address'])->name('address');
-Route::get('home/orders', [HomeController::class, 'orders'])->name('orders');
-Route::post('shop/addtocart', [HomeController::class, 'addtocart'])->name('addtocart');
-Route::any('shop/cart', [HomeController::class, 'cart'])->name('cart');
-Route::any('shop/checkout/details', [HomeController::class, 'checkoutDetails'])->name('checkout-details');
-Route::get('shop/checkout/shipping', [HomeController::class, 'checkoutShipping'])->name('checkout-shipping');
-Route::get('shop/checkout/review', [HomeController::class, 'checkoutReview'])->name('checkout-review');
-Route::any('shop/checkout/payment', [HomeController::class, 'prePayment'])->name('checkout-payment');
-Route::any('shop/checkout/payment-gateway', [HomeController::class, 'paymentGateway'])->name('payment-gateway');
-Route::get('shop/checkout/complete', [HomeController::class, 'checkoutComplete'])->name('checkout-complete');
-Route::get('shop/cart/delete-product/{id}', [HomeController::class, 'deleteCartProduct'])->name('delete-cart-product');
-
+    Route::any('home', [HomeController::class, 'index'])->name('home');
+    Route::any('logout', [HomeController::class, 'logout'])->name('logout');
+    Route::any('home/address', [HomeController::class, 'address'])->name('address');
+    Route::get('home/orders', [HomeController::class, 'orders'])->name('orders');
+    Route::post('shop/addtocart', [HomeController::class, 'addtocart'])->name('addtocart');
+    Route::any('shop/cart', [HomeController::class, 'cart'])->name('cart');
+    Route::any('shop/checkout/details', [HomeController::class, 'checkoutDetails'])->name('checkout-details');
+    Route::get('shop/checkout/shipping', [HomeController::class, 'checkoutShipping'])->name('checkout-shipping');
+    Route::get('shop/checkout/review', [HomeController::class, 'checkoutReview'])->name('checkout-review');
+    Route::any('shop/checkout/payment', [HomeController::class, 'prePayment'])->name('checkout-payment');
+    Route::any('shop/checkout/payment-gateway', [HomeController::class, 'paymentGateway'])->name('payment-gateway');
+    Route::get('shop/checkout/complete', [HomeController::class, 'checkoutComplete'])->name('checkout-complete');
+    Route::get('shop/cart/delete-product/{id}', [HomeController::class, 'deleteCartProduct'])->name('delete-cart-product');
+});
 //CUSTOMER AUTH ROUTES END
 
 
@@ -110,51 +111,52 @@ Route::group(['middleware' => 'WhoU'], function(){
 
 
 //ADMIN AUTH ROUTES
-Route::get('admin', [AdminController::class, 'index'])->name('admin');
+Route::group(['middleware' => 'AdminAuth'], function(){
+    Route::get('admin', [AdminController::class, 'index'])->name('admin');
 
-Route::post('admin/logout', [AdminController::class, 'logout'])->name('admin-logout');
+    Route::post('admin/logout', [AdminController::class, 'logout'])->name('admin-logout');
 
-Route::match(['get', 'post'], '/admin/user/add-user/{type}', [AdminController::class, 'addUser'])->name('admin-add-user');
+    Route::match(['get', 'post'], '/admin/user/add-user/{type}', [AdminController::class, 'addUser'])->name('admin-add-user');
 
-Route::get('/admin/user/edit/{type}/{id}', [AdminController::class, 'addUser'])->name('admin-edit-user');
+    Route::get('/admin/user/edit/{type}/{id}', [AdminController::class, 'addUser'])->name('admin-edit-user');
 
-Route::get('/admin/attributes/all-attributes', [AdminController::class, 'showAttributes'])->name('admin-show-attributes');
+    Route::get('/admin/attributes/all-attributes', [AdminController::class, 'showAttributes'])->name('admin-show-attributes');
 
-Route::match(['get', 'post'], '/admin/add_attribute/{edit_id?}', [AdminController::class, 'AddAttribute'])->name('add_attribute');
+    Route::match(['get', 'post'], '/admin/add_attribute/{edit_id?}', [AdminController::class, 'AddAttribute'])->name('add_attribute');
 
-Route::match(['get', 'post'], '/admin/add_attribute_values/{edit_id?}', [AdminController::class, 'AddAttributeValues'])->name('add_attribute_values');
+    Route::match(['get', 'post'], '/admin/add_attribute_values/{edit_id?}', [AdminController::class, 'AddAttributeValues'])->name('add_attribute_values');
 
-Route::get('/admin/attributes/all-attribute-values', [AdminController::class, 'showAttributeValues'])->name('admin-show-attribute-values');
+    Route::get('/admin/attributes/all-attribute-values', [AdminController::class, 'showAttributeValues'])->name('admin-show-attribute-values');
 
-Route::get('/admin/orders/all-orders',[AdminController::class, 'allOrders'])->name('admin-orders');
-Route::get('/admin/payments/all-payments',[AdminController::class, 'allPayments'])->name('admin-payments');
+    Route::get('/admin/orders/all-orders',[AdminController::class, 'allOrders'])->name('admin-orders');
+    Route::get('/admin/payments/all-payments',[AdminController::class, 'allPayments'])->name('admin-payments');
 
-Route::post('/admin/verify_user',[AdminController::class, 'verifyUser']
-)->name('verify_user');
+    Route::post('/admin/verify_user',[AdminController::class, 'verifyUser']
+    )->name('verify_user');
 
-Route::get('/admin/users/{type?}',[AdminController::class, 'showUser']
-)->name('admin-show-users');
+    Route::get('/admin/users/{type?}',[AdminController::class, 'showUser']
+    )->name('admin-show-users');
 
-Route::get('/admin/users/view-user/{id}',[AdminController::class, 'viewUser']
-)->name('admin-view-user'); 
+    Route::get('/admin/users/view-user/{id}',[AdminController::class, 'viewUser']
+    )->name('admin-view-user'); 
 
-Route::get('/admin/categories/all-categories', [AdminController::class, 'showCategory'])->name('admin-all-categories');
+    Route::get('/admin/categories/all-categories', [AdminController::class, 'showCategory'])->name('admin-all-categories');
 
-Route::match(['get', 'post'], '/admin/add_category/{edit_id?}', [AdminController::class, 'AddCategory'])->name('add_category');
+    Route::match(['get', 'post'], '/admin/add_category/{edit_id?}', [AdminController::class, 'AddCategory'])->name('add_category');
 
-Route::match(['get', 'post'], '/admin/add-ad-banner/{edit_id?}', [AdminController::class, 'addAdBanner'])->name('add_ad_banner');
-Route::get('/admin/products/all-products', [AdminController::class, 'showProduct'])->name('admin-all-products');
+    Route::match(['get', 'post'], '/admin/add-ad-banner/{edit_id?}', [AdminController::class, 'addAdBanner'])->name('add_ad_banner');
+    Route::get('/admin/products/all-products', [AdminController::class, 'showProduct'])->name('admin-all-products');
 
-Route::match(['get', 'post'], '/admin/select_category', [AdminController::class, 'showProductCategories'])->name('showProductCategories');
+    Route::match(['get', 'post'], '/admin/select_category', [AdminController::class, 'showProductCategories'])->name('showProductCategories');
 
-Route::match(['get', 'post'], '/admin/add-product', [AdminController::class, 'addProduct'])->name('add_product');
+    Route::match(['get', 'post'], '/admin/add-product', [AdminController::class, 'addProduct'])->name('add_product');
 
-Route::any('/admin/edit-product/{edit_id?}', [AdminController::class, 'addProduct'])->name('edit_product');
+    Route::any('/admin/edit-product/{edit_id?}', [AdminController::class, 'addProduct'])->name('edit_product');
 
-Route::any('admin/products/delete-product/{id}', [Controller::class, 'deleteProduct'])->name('delete_product');
+    Route::any('admin/products/delete-product/{id}', [Controller::class, 'deleteProduct'])->name('delete_product');
 
-Route::get('/admin/remove/{type}/{id}', [Controller::class, 'delete'])->name('admin-remove');
-
+    Route::get('/admin/remove/{type}/{id}', [Controller::class, 'delete'])->name('admin-remove');
+});
 //ADMIN AUTH ROUTES END
 
 

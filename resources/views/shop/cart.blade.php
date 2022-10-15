@@ -8,8 +8,8 @@
 
         <div id="checkout-cart" class="container">
           <ul class="breadcrumb">
-              <li><a href="{{ route('guest-home') }}">Home</a></li>
-              <li><a href="#">Shopping Cart</a>
+              <li><a href="{{ route('guest-home') }}" class="text-light">Home</a></li>
+              <li><a href="#" class="text-muted">Shopping Cart</a>
               </li>
           </ul>
 

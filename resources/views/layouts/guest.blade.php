@@ -18,6 +18,7 @@
         <script src="{{ asset('js/jquery.min.js') }}" id='jquery-core-js'></script>
         <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
         <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
+        @stack('styles')
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">

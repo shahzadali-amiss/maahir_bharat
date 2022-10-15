@@ -24,3 +24,33 @@
 		display: none!important;
 	}
 }
+.breadcrumb-back {
+    background: #373f50!important;
+    margin: 0 0 20px 0;
+    padding: 20px 0;
+}
+  .check-out-before::before{
+      content: none !important;
+      display: none !important;
+    }
+    .lg-heading{
+      flex: auto;
+    }
+    @media (min-width: 500PX ){
+      .lg-heading{
+          padding-top: 20px;           
+      }
+    }
+.checkout-back-bt{
+	padding: 8px 20px !important;
+	border: 2px solid #e3e9ef !important;
+}
+.sup_profile_img {
+    height: 72px;
+    width: 72px;
+    left: 36px;
+    border-radius: 50%;
+    background-position: center center / contain no-repeat;
+    bottom: 4px;
+    border: 0.5px solid rgb(240, 240, 240);
+}

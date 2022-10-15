@@ -206,7 +206,7 @@
                               <div class="product-layout col-xs-12">
                                   <div class="product-thumb transition clearfix">
                                       <div class="image">
-                                          <a href="{{ route('single', $product->id) }}" target="_blank">
+                                          <a href="{{ route('single', $product->id) }}">
                                               <img src="{{asset('product_images/'.$product->image)}}" alt="Aviator Classic" title="Aviator Classic" class="img-responsive" />
                                               <img class="img-responsive hover-img" src="{{asset('product_images/'.$product->image)}}" title="Aviator Classic" alt="Aviator Classic" />
                                           </a>
@@ -229,7 +229,7 @@
                                                   @endforeach
                                               @endif
                                               
-                                              @if($is_in_cart)
+                                             {{-- @if($is_in_cart)
                                                 <a class="addcart" href="{{ route('cart') }}">
                                                   Go to cart<i class="ci-arrow-right fs-lg me-2"></i>
                                                 </a>
@@ -237,13 +237,13 @@
                                                 <a href="{{ route('single', $product->id)}}" class="addcart d-none" title="Add to Cart" id="tocart">Add to Cart</a>
 
                                                 <button class="addcart" title="Add to Cart" onclick="event.preventDefault(); document.getElementById('tocart').click();">Add to Cart</button>
-                                              @endif 
+                                              @endif --}}
                                           </form>
                                       </div>
                                       <div class="thumb-description clearfix">
                                           <div class="caption">
                                               <h4 class="product-title">
-                                                <a href="{{ route('single', $product->id) }}" target="_blank">{{ $product->name }}</a></h4>
+                                                <a href="{{ route('single', $product->id) }}">{{ $product->name }}</a></h4>
                                                 
                                               <p class="price"><span class="price-new">₹{{ $product->offer_price }}</span><span class="price-old">₹{{ $product->mrp }}</span>
                                                 <span class="section-sale" style="color: green">

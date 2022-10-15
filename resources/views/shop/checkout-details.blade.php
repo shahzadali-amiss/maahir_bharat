@@ -1,7 +1,7 @@
 @extends('layouts.home')
 @section('content')
   <div class="page-title-overlap bg-dark pt-4">
-    <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+    <div class="container d-lg-flex justify-content-between py-2 py-lg-3 check-out-before">
       <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
         <nav aria-label="breadcrump">
           <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
@@ -12,7 +12,7 @@
           </ol>
         </nav>
       </div>
-      <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+      <div class="order-lg-1 pe-lg-4 text-center text-lg-start lg-heading">
         <h1 class="h3 text-light mb-0 ">Checkout</h1>
       </div>
     </div>
@@ -193,7 +193,7 @@
         </div> -->
         <!-- Navigation (desktop)-->
         <div class="d-none d-lg-flex pt-4 mt-3">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="{{route('cart')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100 checkout-back-bt" href="{{route('cart')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><button class="btn btn-primary d-block w-100" onclick="jQuery('#address-form').submit();"><span class="d-none d-sm-inline">Proceed to Order Review</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></button></div>
         </div>
       </section>
@@ -244,11 +244,23 @@
 @endsection
 @push('styles')
   <style type="text/css">
-    .breadcrumb-back {
+/*    .breadcrumb-back {
         background: #373f50!important;
-        margin: 0 0 50px 0;
+        margin: 0 0 20px 0;
         padding: 20px 0;
     }
+      .check-out-before::before{
+          content: none !important;
+          display: none !important;
+        }
+        #lg-heading{
+          flex: auto;
+        }
+        @media (min-width: 500PX ){
+          #lg-heading{
+              padding-top: 20px;           
+          }
+        }*/
   </style>
 @endpush
 @push('scripts')

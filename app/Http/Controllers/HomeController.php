@@ -25,6 +25,7 @@ class HomeController extends Controller
     public function index(Request $request){
         if($request->isMethod('get')){
             $data = $this->getAllData();
+            // dd($request);
             $data['page'] = 'Profile';
             return view('customer.profile', $data);
         }else{

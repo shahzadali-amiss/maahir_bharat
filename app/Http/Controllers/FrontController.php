@@ -21,6 +21,7 @@ use Illuminate\Validation\Rules;
 use App\Models\OTP;
 use Validator;
 use Session; 
+use Auth;
    
 class FrontController extends Controller
 {
@@ -267,8 +268,14 @@ class FrontController extends Controller
     }
 
     public function index(){ 
+        if(Auth::check()){
+            if(Auth::user()->role == 's'){
+                return redirect()->route('seller-home');
+            }else if(Auth::user()->role == 'a'){
+                return redirect()->route('admin');
+            }
+        }
         $data = $this->getAllData(); 
-         
         return view('welcome', $data);
 
     }

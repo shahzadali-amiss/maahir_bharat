@@ -93,7 +93,7 @@ function moveProductImage($file, $name){
 function replaceProductImage($file, $name, $oldImage){
 	$destinationPath = public_path( '/product_images' );
     $image = $file->$name;
-    $fileName = 'image'.rand((int)11111111111111,(int)99999999999999). '.'.$image->clientExtension();
+    $fileName = rand(11111, 99999999).time().'.'.$image->clientExtension();
     $image->move( $destinationPath, $fileName );
     unlink(public_path('product_images/'.$oldImage));
     return $fileName;

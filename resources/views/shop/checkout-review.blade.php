@@ -1,7 +1,7 @@
 @extends('layouts.home')
 @section('content')
   <div class="page-title-overlap bg-dark pt-4">
-    <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+    <div class="container d-lg-flex justify-content-between py-2 py-lg-3 check-out-before">
       <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
@@ -12,7 +12,7 @@
           </ol>
         </nav>
       </div>
-      <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+      <div class="order-lg-1 pe-lg-4 text-center text-lg-start lg-heading">
         <h1 class="h3 text-light mb-0">Checkout</h1>
       </div>
     </div>
@@ -104,7 +104,7 @@
         </div>
         <!-- Navigation (desktop)-->
         <div class="d-none d-lg-flex pt-4">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="{{route('checkout-details')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping Details</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100 checkout-back-bt" href="{{route('checkout-details')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping Details</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{ route('checkout-payment') }}"><span class="d-none d-sm-inline">Select Payment Method</span><span class="d-inline d-sm-none">Complete</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
       </section>

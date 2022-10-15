@@ -86,7 +86,7 @@
                 class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
             </div>
             <a href="" class="reviews"
-              onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">1
+              onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">4
               reviews</a>
             <a href="" class="write-review"
               onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;"><i
@@ -95,7 +95,7 @@
           <hr>
           <ul class="list-unstyled">
             <li><span class="disc">Brand:</span> <a class="disc1"
-                href="https://opencart.mahardhi.com/MT04/noriva/05/index.php?route=product/manufacturer/info&amp;manufacturer_id=9">Canon</a>
+                href="">Canon</a>
             </li>
             <li><span class="disc">Product Code:</span><span class="disc1"> Product 3</span></li>
             <li><span class="disc">Reward Points:</span><span class="disc1"> 200</span></li>
@@ -188,6 +188,40 @@
             </div>
           </form>
           <hr>
+          <div class="col-sm-12 col-lg-8 border rounded mt-2">
+            <div class="row"><h3 class="pt-3">Sold BY</h3></div>
+            <div class="row mt-2">
+              <div class="col-4">
+                <img src="{{asset('images/shop_profile.png')}}" class="sup_profile_img">
+              </div>
+              <div class="col-4 pt-2">
+                <h4><strong>Supplier Name</strong></h4>
+              </div>
+              <div class="col-4 mt-3">
+                  <a class="btn btn-primary btn-shadow d-block w-100 p-2 rounded" href="{{ route('cart') }}">Go to Shop<i class="ci-arrow-right fs-lg me-2"></i></a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 pt-3">
+                <div class="rating clearfix">
+                  <div class="product-rating">
+                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                        class="fa fa-star-o fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                        class="fa fa-star-o fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                        class="fa fa-star-o fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                        class="fa fa-star-o fa-stack-1x"></i></span>    
+                    <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> 
+                  </div>               
+                </div>
+                  <a href="" class="reviews mt-2"
+                    onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">4.5
+                    Ratings</a>
+              </div>
+            </div>
+          </div>
           <!-- AddThis Button BEGIN -->
           <!-- <div class="addthis_toolbox addthis_default_style"
             data-url="">
@@ -301,8 +335,8 @@
                           title="Add To Compare" onclick="compare.add('29');"><i
                             class="icon-change"></i></button>
                       </div> -->
-                      <a href="{{ route('single', $related->id) }}" class="addcart" title="Add to Cart">Add
-                        to Cart</a>
+                    <!--   <a href="{{ route('single', $related->id) }}" class="addcart" title="Add to Cart">Add
+                        to Cart</a> -->
                     </div>
                     <div class="thumb-description clearfix">
                       <div class="caption">

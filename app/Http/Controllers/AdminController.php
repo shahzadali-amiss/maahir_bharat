@@ -37,8 +37,8 @@ class AdminController extends Controller
 
     //removes the admin from session and returns admin login view
     public function logout(Request $request){
-        Session::forget('admin');
-        return redirect()->route('admin-login');
+        Session::flush();
+        return redirect()->route('login');
     }
 
     // USED TO VERIFY/NON VERIFY SUPPLIER

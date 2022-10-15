@@ -29,16 +29,17 @@ class WhoU
 
 
         if(Auth::check()){
+            // dd(Auth::user()->role);
             if (Auth::user()->role == 's') {
                 return $next($request);
-            }else{
+            }
+            else{
                 return redirect('/');
             }
         }else{
             return redirect('/login');
         }
 
-        return $next($request);
     }
 
 

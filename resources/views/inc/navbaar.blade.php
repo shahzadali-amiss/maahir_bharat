@@ -1,4 +1,4 @@
-<nav id="top"> 
+<nav id="top" style="margin-bottom: 0;"> 
     <!-- <div class="max-container"> -->
     <div class="container">
         <div class="header-top">  
