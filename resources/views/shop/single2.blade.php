@@ -1,38 +1,33 @@
 @extends('layouts.home')
 @section('content')
-<div class="page-title-overlap bg-dark pt-4"> 
-  <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
-    <div class="mb-3 mb-lg-0 pt-lg-2">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start"> 
-          <li class="breadcrumb-item">
+
+<div class="page-title-overlap bg-dark">
+  <div class="container">
+    
+    <nav aria-label="breadcrump">
+      <div class="col-md-12" style="margin-left: -30px;">
+        <div class="breadcrumb-back"><div class="container"><ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+          <li class="breadcrumb-item"><a class="text-nowrap" href="#"><i class="ci-home"></i>Home</a></li>
+          <li class="breadcrumb-item text-nowrap"><a href="#">Shop</a>
+          </li>
+          <li class="breadcrumb-item text-nowrap active" aria-current="page">
             <a class="text-nowrap text-white" href="#">
               {{ ucwords(getCategory($product->grand_category_id)->name) }}
             </a>
           </li>
-        @if(!is_null($product->parent_category_id))
-          <li class="breadcrumb-item text-nowrap text-white"> 
-            <a href="#">
-                {{ ucwords(getCategory($product->parent_category_id)->name) }}
-            </a>
+          <li class="breadcrumb-item text-nowrap active" aria-current="page">
+            {{ ucwords($product->name) }}
           </li>
-        @endif
-        @if(!is_null($product->category_id))
-          <li class="breadcrumb-item text-nowrap text-white">
-            <a href="#">
-              {{ ucwords(getCategory($product->category_id)->name) }}
-            </a>
-          </li>
-        @endif
-        </ol>
+        </ol></div></div>
       </nav>
     </div>
+
   </div>
 </div>
 
 <div id="product-page" class="container">
   <div class="row">
-    <div id="content" class="col-sm-12" style="background-color: aliceblue;">
+    <div id="content" class="col-sm-12" style="background-color: aliceblue; padding: 10px 25px 30px 25px;">
       <!-- <h2 class="page_title">{{ucwords($product->name)}}</h2> -->
       <div class="pro-deatil row">
         <div class="col-sm-6 product-img" style="margin-top: 20px">
@@ -73,8 +68,11 @@
           </div>
         </div>
         <div class="col-sm-6 right_info" style="margin-top: 20px">
-          <h1 class="">{{ucwords($product->name)}}</h1>
-          <div class="rating clearfix">
+          <h2 class="">
+            {{ ucwords($product->name) }}
+          </h2>
+          
+          <!-- <div class="rating clearfix">
             <div class="product-rating">
               <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
                   class="fa fa-star-o fa-stack-1x"></i></span>
@@ -101,18 +99,21 @@
             <li><span class="disc">Reward Points:</span><span class="disc1"> 200</span></li>
             <li><span class="disc">Availability:</span><span class="disc1"> In Stock</span></li>
           </ul>
-          <hr>
+          <hr> -->
+
+          <br><hr>
+
           <ul class="list-unstyled">
             <li>
               <span class="pro_price">₹{{ $product->offer_price }}</span><span class="pro_oldprice"
                 style="text-decoration: line-through;">₹{{ $product->mrp }}</span>
             </li>
-            <li class="tax">Ex Tax: ₹95.00</li>
+            <!-- <li class="tax">Ex Tax: ₹95.00</li> -->
           </ul>
-          <hr>
+          
           <form action="{{ route('addtocart') }}" method="post">
             <div id="product" class="product-options">
-              <h3>Available Options</h3>
+              <!-- <h3>Available Options</h3> --><br>
               <input type="hidden" name="product_id" value="{{ $product->id }}">
               @foreach($product_attributes as $key => $value)            
               <div class="fs-sm">
@@ -147,7 +148,7 @@
                   <div class="product-btn-quantity">
                     <div class="minus-plus">
                       <button class="minus"><i class="fa fa-minus"></i></button>
-                      <input type="text" name="quantity" value="1" size="2" id="input-quantity"
+                      <input type="text" class="item qty" name="quantity" value="1" size="2" id="input-quantity"
                         class="form-control" />
                       <button class="plus"><i class="fa fa-plus"></i></button>
                     </div>
@@ -174,37 +175,36 @@
                           Go to cart<i class="ci-arrow-right fs-lg me-2"></i>
                         </a>
                       @else
-                        <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+                        <a class="btn btn-primary btn-lg add-to-cart" href="javascript:void(0)">Add to Cart</a>
                       @endif  
 
+                      <input type="hidden" class="item pid" value="{{ $product->id }}"></span>
 
-                    <button type="button" class="pro_wish" title="Add To WishList"
+                    <!-- <button type="button" class="pro_wish" title="Add To WishList"
                       onclick="wishlist.add('30');"><i class="icon-heart"></i></button>
                     <button type="button" class="pro_comper" title="Add To Compare"
-                      onclick="compare.add('30');"><i class="icon-change"></i></button>
+                      onclick="compare.add('30');"><i class="icon-change"></i></button> -->
+                      
                   </div>
                 </div>
               </form>
             </div>
           </form>
-          <hr>
-          <div class="col-sm-12 col-lg-8 border rounded mt-2">
-            <div class="row"><h3 class="pt-3">Sold BY</h3></div>
-            <div class="row mt-2">
-              <div class="col-4">
-                <img src="{{asset('images/shop_profile.png')}}" class="sup_profile_img">
-              </div>
-              <div class="col-4 pt-2">
-                <h4><strong>Supplier Name</strong></h4>
-              </div>
-              <div class="col-4 mt-3">
-                  <a class="btn btn-primary btn-shadow d-block w-100 p-2 rounded" href="{{ route('cart') }}">Go to Shop<i class="ci-arrow-right fs-lg me-2"></i></a>
-              </div>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Description</h3>
+              {{ $product->description }}
+              <br><br>
             </div>
-            <div class="row">
-              <div class="col-6 pt-3">
+          </div>
+
+          <div class="col-sm-12 col-lg-8 border rounded mt-2" style="background-color: #fff">
+            <div class="row py-3">
+              <div class="col-5 text-center">
+                <img src="{{asset('images/shop_profile.png')}}" class="sup_profile_img">
                 <div class="rating clearfix">
-                  <div class="product-rating">
+                  <div class="">
                     <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
                         class="fa fa-star-o fa-stack-1x"></i></span>
                     <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
@@ -216,12 +216,22 @@
                     <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> 
                   </div>               
                 </div>
-                  <a href="" class="reviews mt-2"
+                <a href="" class="reviews mt-2"
                     onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">4.5
                     Ratings</a>
               </div>
+              <div class="col-7" style="display: table;">
+                <div style="vertical-align: middle; display: table-cell;">
+                  <!-- <h3>Seller</h3> -->
+                  <h4>
+                    <strong>{{ $product->supplier ? $product->supplier->supplier_name : $product->user->name }}</strong>
+                  </h4>
+                  <a class="btn-shadow d-block w-100 p-2 rounded" href="{{ route('store', $product->role_id) }}">Go to Shop<i class="ci-arrow-right fs-lg me-2"></i></a>
+                </div>
+              </div>
             </div>
           </div>
+
           <!-- AddThis Button BEGIN -->
           <!-- <div class="addthis_toolbox addthis_default_style"
             data-url="">
@@ -235,146 +245,153 @@
           <!-- AddThis Button END -->
         </div>
       </div>
-      <div class="col-sm-12">
-        <div class="row propage-tab">
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
-            <li><a href="#tab-review" data-toggle="tab">Reviews (1)</a></li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab-description">
-              <p>
-                {{ $product->description }}</p>
-            </div>
-            <div class="tab-pane" id="tab-review">
-              <form class="form-horizontal" id="form-review">
-                <div id="review"></div>
-                <h2>Write a review</h2>
-                <div class="form-group required">
-                  <div class="col-sm-2">
-                    <label class="control-label" for="input-name">Your Name</label>
-                  </div>
-                  <div class="col-sm-10">
-                    <input type="text" name="name" value="" id="input-name"
-                      class="form-control" />
-                  </div>
-                </div>
-                <div class="form-group required">
-                  <div class="col-sm-2">
-                    <label class="control-label" for="input-review">Your Review</label>
-                  </div>
-                  <div class="col-sm-10">
-                    <textarea name="text" rows="5" id="input-review"
-                      class="form-control"></textarea>
-                    <div class="help-block"><span class="text-danger">Note:</span> HTML is not
-                      translated!
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group required">
-                  <div class="col-sm-2">
-                    <label class="control-label">Rating</label>
-                  </div>
-                  <div class="col-sm-10">
-                    &nbsp;&nbsp;&nbsp; Bad&nbsp;
-                    <input type="radio" name="rating" value="1" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="2" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="3" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="4" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="5" />
-                    &nbsp;Good
-                  </div>
-                </div>
+      
+    </div>
+  </div>
+</div>
 
-                <div class="buttons clearfix">
-                  <div class="pull-right">
-                    <button type="button" id="button-review" data-loading-text="Loading..."
-                      class="btn btn-primary">Continue</button>
-                  </div>
+<div class="container">
+
+  <div class="col-sm-12">
+            <div class="row propage-tab">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
+                <li><a href="#tab-review" data-toggle="tab">Reviews (1)</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab-description">
+                  <p>
+                    {{ $product->description }}</p>
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="related-products-block box">
-        <div class="box-content">
-          <div class="page-title">
-            <h3>Related Products</h3>
-          </div>
-          <div class="block_box row category-row">
-            <div id="related-carousel" class="box-product  related-carousel  clearfix" data-items="4">
-            
-              @if(!is_null($rel_products) or count($rel_products)>0)
-              @foreach($rel_products as $related)
-                <div class="product-layout col-xs-12" style="max-height: 500px">
-                  <div class="product-thumb">
-                    <div class="image" >
-                      <a
-                        href="{{ route('single', $related->id) }}">
-                        <img src="{{ asset('product_images/'.$related->image) }}"
-                          alt="Party Wear Shoes" title="Party Wear Shoes"
-                          class="img-responsive" />
-                        <img class="img-responsive hover-img"
-                          src="{{ asset('product_images/'.$related->image) }}"
-                          title="{{ $related->name }}" alt="{{ $related->name }}" />
-                      </a>
-                      <!-- <div class="button-group">
-                        <button type="button" class="wishlist" data-toggle="tooltip"
-                          title="Add To WishList" onclick="wishlist.add('29');"><i
-                            class="icon-heart"></i></button>
-                        <button type="button" data-toggle="tooltip" class="quickview-button"
-                          title="Quickview"
-                          onclick="quickView.ajaxView('?route=product/quickview&product_id=29');"><i
-                            class="icon-eye"></i></button>
-                        <button type="button" class="compare" data-toggle="tooltip"
-                          title="Add To Compare" onclick="compare.add('29');"><i
-                            class="icon-change"></i></button>
-                      </div> -->
-                    <!--   <a href="{{ route('single', $related->id) }}" class="addcart" title="Add to Cart">Add
-                        to Cart</a> -->
+                <div class="tab-pane" id="tab-review">
+                  <form class="form-horizontal" id="form-review">
+                    <div id="review"></div>
+                    <h2>Write a review</h2>
+                    <div class="form-group required">
+                      <div class="col-sm-2">
+                        <label class="control-label" for="input-name">Your Name</label>
+                      </div>
+                      <div class="col-sm-10">
+                        <input type="text" name="name" value="" id="input-name"
+                          class="form-control" />
+                      </div>
                     </div>
-                    <div class="thumb-description clearfix">
-                      <div class="caption">
-                        <h4 class="product-title"><a
-                            href="{{ route('single', $related->id) }}">{{ $related->name }}</a></h4>
-                        <p class="price">
-                          ₹{{ $related->offer_price }}<span class="price-old">₹{{ $related->mrp }}</span>
-                          <span class="section-sale" style="color: green">
-                            @php $decount = 100 * ($related->mrp - $related->offer_price) / $related->mrp; @endphp
-                            {{ (integer) $decount }}% off
-                          </span>
-                        </p>
-                        <div class="rating">
-                          <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
-                              class="fa fa-star-o fa-stack-2x"></i></span> <span
-                            class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
-                              class="fa fa-star-o fa-stack-2x"></i></span> <span
-                            class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
-                              class="fa fa-star-o fa-stack-2x"></i></span> <span
-                            class="fa fa-stack"><i
-                              class="fa fa-star-o fa-stack-2x"></i></span> <span
-                            class="fa fa-stack"><i
-                              class="fa fa-star-o fa-stack-2x"></i></span>
+                    <div class="form-group required">
+                      <div class="col-sm-2">
+                        <label class="control-label" for="input-review">Your Review</label>
+                      </div>
+                      <div class="col-sm-10">
+                        <textarea name="text" rows="5" id="input-review"
+                          class="form-control"></textarea>
+                        <div class="help-block"><span class="text-danger">Note:</span> HTML is not
+                          translated!
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div class="form-group required">
+                      <div class="col-sm-2">
+                        <label class="control-label">Rating</label>
+                      </div>
+                      <div class="col-sm-10">
+                        &nbsp;&nbsp;&nbsp; Bad&nbsp;
+                        <input type="radio" name="rating" value="1" />
+                        &nbsp;
+                        <input type="radio" name="rating" value="2" />
+                        &nbsp;
+                        <input type="radio" name="rating" value="3" />
+                        &nbsp;
+                        <input type="radio" name="rating" value="4" />
+                        &nbsp;
+                        <input type="radio" name="rating" value="5" />
+                        &nbsp;Good
+                      </div>
+                    </div>
+
+                    <div class="buttons clearfix">
+                      <div class="pull-right">
+                        <button type="button" id="button-review" data-loading-text="Loading..."
+                          class="btn btn-primary">Continue</button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              @endforeach 
-              @endif 
+              </div>
             </div>
           </div>
+
+  <div class="related-products-block box">
+    <div class="box-content">
+      <div class="page-title">
+        <h3>Related Products</h3><br>
+      </div>
+      <div class="block_box row category-row">
+        <div id="related-carousel" class="box-product  related-carousel  clearfix" data-items="4">
+        
+          @if(!is_null($rel_products) or count($rel_products)>0)
+          @foreach($rel_products as $related)
+            <div class="product-layout col-xs-12" style="max-height: 500px">
+              <div class="product-thumb">
+                <div class="image" >
+                  <a
+                    href="{{ route('single', $related->id) }}">
+                    <img src="{{ asset('product_images/'.$related->image) }}"
+                      alt="Party Wear Shoes" title="Party Wear Shoes"
+                      class="img-responsive" />
+                    <img class="img-responsive hover-img"
+                      src="{{ asset('product_images/'.$related->image) }}"
+                      title="{{ $related->name }}" alt="{{ $related->name }}" />
+                  </a>
+                  <!-- <div class="button-group">
+                    <button type="button" class="wishlist" data-toggle="tooltip"
+                      title="Add To WishList" onclick="wishlist.add('29');"><i
+                        class="icon-heart"></i></button>
+                    <button type="button" data-toggle="tooltip" class="quickview-button"
+                      title="Quickview"
+                      onclick="quickView.ajaxView('?route=product/quickview&product_id=29');"><i
+                        class="icon-eye"></i></button>
+                    <button type="button" class="compare" data-toggle="tooltip"
+                      title="Add To Compare" onclick="compare.add('29');"><i
+                        class="icon-change"></i></button>
+                  </div> -->
+                <!--   <a href="{{ route('single', $related->id) }}" class="addcart" title="Add to Cart">Add
+                    to Cart</a> -->
+                </div>
+                <div class="thumb-description clearfix">
+                  <div class="caption">
+                    <h4 class="product-title"><a
+                        href="{{ route('single', $related->id) }}">{{ $related->name }}</a></h4>
+                    <p class="price">
+                      ₹{{ $related->offer_price }}<span class="price-old">₹{{ $related->mrp }}</span>
+                      <span class="section-sale" style="color: green">
+                        @php $decount = 100 * ($related->mrp - $related->offer_price) / $related->mrp; @endphp
+                        {{ (integer) $decount }}% off
+                      </span>
+                    </p>
+                    <div class="rating">
+                      <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
+                          class="fa fa-star-o fa-stack-2x"></i></span> <span
+                        class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
+                          class="fa fa-star-o fa-stack-2x"></i></span> <span
+                        class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
+                          class="fa fa-star-o fa-stack-2x"></i></span> <span
+                        class="fa fa-stack"><i
+                          class="fa fa-star-o fa-stack-2x"></i></span> <span
+                        class="fa fa-stack"><i
+                          class="fa fa-star-o fa-stack-2x"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endforeach 
+          @endif 
         </div>
       </div>
     </div>
   </div>
 </div>
-  <!-- M-Custom script -->
+
+<!-- M-Custom script -->
 <script>
   $(document).ready(function () {
     // Additional images

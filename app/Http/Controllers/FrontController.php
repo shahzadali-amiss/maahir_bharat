@@ -25,6 +25,12 @@ use Auth;
    
 class FrontController extends Controller
 {
+
+    public function sellerStore($role_id){
+        $data['products'] = Product::where(['status' => 1, 'role_id' => $role_id])->orderBy('id', 'desc')->paginate(10);
+        return view('seller.products')->with($data);
+    }
+
     public function policy($type){
         return view('front.policies.'.$type);
     }
@@ -268,13 +274,13 @@ class FrontController extends Controller
     }
 
     public function index(){ 
-        if(Auth::check()){
-            if(Auth::user()->role == 's'){
-                return redirect()->route('seller-home');
-            }else if(Auth::user()->role == 'a'){
-                return redirect()->route('admin');
-            }
-        }
+        // if(Auth::check()){
+        //     if(Auth::user()->role == 's'){
+        //         return redirect()->route('seller-home');
+        //     }else if(Auth::user()->role == 'a'){
+        //         return redirect()->route('admin');
+        //     }
+        // }
         $data = $this->getAllData(); 
         return view('welcome', $data);
 
@@ -324,8 +330,8 @@ class FrontController extends Controller
         // dd($id);
         if($id){
 
-
-            $product =  Product::find($id);
+            $product =  Product::with('supplier')->find($id);
+            // dd($product);
             $data['product']=$product;
             $data['product_attributes']=getProductAttributes($id);
             
@@ -359,7 +365,7 @@ class FrontController extends Controller
             $cat->where('category_id', $cid);    
             $data['category'] = Category::find($cid);
         }
-        $data['products'] = $cat->where('status',true)->paginate(8);
+        $data['products'] = $cat->where('status',true)->paginate(50);
         // dd($data);
         return view('shop.shop')->with($data);
        
@@ -367,7 +373,7 @@ class FrontController extends Controller
 
     public function allProducts(Request $request){
         $data = $this->getAllData();
-        $data['products']=Product::where('status',true)->orderBy('id', 'desc')->paginate(8);
+        $data['products']=Product::where('status',true)->orderBy('id', 'desc')->paginate(50);
         // dd($data['products']);
         $data['category'] = null;
         return view('shop.shop')->with($data);

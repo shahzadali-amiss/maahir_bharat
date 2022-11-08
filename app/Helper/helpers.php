@@ -16,7 +16,10 @@ use App\Models\BannerAds;
 use App\Models\Supplier;
 use Carbon\Carbon;
 
-
+function getCartCount(){
+    $role_id = Auth::user()->id;
+    return Order::where('user_id', $role_id)->count();
+}
 
 function getUser($mobile, $role){
 	$user=User::where('mobile', $mobile)->where('role', $role)->get()->toArray();
@@ -64,8 +67,12 @@ function getPrimaryAdBanners(){
 }
 
 function getSupplierDetails(){
-    
-    return Supplier::where('role_id',Auth::user()->id)->first();
+    if(Auth::check() && Auth::user()->role == 's')
+        $role_id = Auth::user()->id;
+    else
+        $role_id = request()->segment(2);
+    // dd($role_id);
+    return Supplier::where('role_id', $role_id)->first();
 }
 
 function getSupplierById($id){
@@ -126,7 +133,8 @@ function getCartQuantity(){
 }
 
 function getCartProductQuantity($pid){
-    $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $pid])->get();
+    // $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $pid])->get();
+    $quantities = \App\Models\Order::visitor(request())->where('is_in_cart', true)->get();
     if(!$quantities->isEmpty())
         $i=$quantities[0]->quantity;
 
@@ -148,7 +156,8 @@ function getCartProductAttributes($pid){
 
 
 function getCartProducts(){
-    $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
+    // $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true])->get();
+    $quantities = \App\Models\Order::visitor(request())->where('is_in_cart', true)->get();
     if(!$quantities->isEmpty()){
         foreach ($quantities as $key => $quantity) {
             $products[$key]=Product::find($quantity->product_id);
@@ -256,7 +265,13 @@ function getAllOrders(){
 }
 
 function getSupplierProducts(){
-    $products=Product::where(['role_id'=>Auth::user()->id, 'status' => true])->orderby('id', 'desc')->get();
+
+    if(Auth::check() && Auth::user()->role == 's')
+        $role_id = Auth::user()->id;
+    else
+        $role_id = request()->segment(2);
+
+    $products=Product::where(['role_id'=>$role_id, 'status' => true])->orderby('id', 'desc')->get();
     // dd($products);
     return $products;
 }

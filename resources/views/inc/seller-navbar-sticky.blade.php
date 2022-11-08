@@ -28,11 +28,9 @@
           <i class="navbar-tool-icon ci-heart"></i>
         </div>
       </a> -->
-      @if(Auth::user())
-      @php
-        $supplier_details=getSupplierDetails();
-      @endphp
-      @endif
+
+      @php $supplier_details = getSupplierDetails() @endphp
+
       <div class="navbar-tool dropdown ms-2">
         <a class="navbar-tool-icon-box border dropdown-toggle" href="#" style="overflow: hidden;">
           
@@ -42,7 +40,9 @@
             <img class="rounded-circle" src="{{ asset('images/store_icon.png') }}">
           @endif
 
-          {{ Auth::user()->name }}
+          @if($supplier_details)
+            {{ $supplier_details->business_name }}
+          @endif
 
         </a>
         <a class="navbar-tool-text ms-n1">

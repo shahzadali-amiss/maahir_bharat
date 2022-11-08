@@ -15,15 +15,34 @@ $supplier_details=getSupplierDetails();
       </div>
       <div class="ps-3">
         <h3 class="text-light fs-lg mb-0">
-          {{ Auth::user()->name }}
-        </h3><span class="d-block text-light fs-ms opacity-60 py-1">Joined on {{ date('d M, Y',strtotime(Auth::user()->created_at)) }}</span>
+          @if($supplier_details)
+            {{ $supplier_details->supplier_name }}
+          @endif
+        </h3>
+
+        @if($supplier_details)
+          <span class="d-block text-light fs-ms opacity-60 py-1">Joined on {{ date('d M, Y',strtotime($supplier_details->created_at)) }}</span>
+        @endif
       </div>
     </div>
     <div class="d-flex">
-      <div class="text-sm-end me-5">
-        <div class="text-light fs-base">Total sales</div>
-        <h3 class="text-light">₹{{getSupplierEarning()}}</h3>
-      </div>
+      
+      @if(Auth::check() && Auth::user()->role == 's')
+        <div class="text-sm-end me-5">
+          <div class="text-light fs-base">Total sales</div>
+          <h3 class="text-light">₹{{getSupplierEarning()}}</h3>
+        </div>
+
+      @else
+
+        <div class="text-sm-end me-5">
+          <div class="text-light fs-base">
+            <button class="btn btn-outline-light">Follow</button>
+          </div>
+        </div>
+
+      @endif
+
       <div class="text-sm-end">
         <div class="text-light fs-base">Seller rating</div>
         <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star"></i>

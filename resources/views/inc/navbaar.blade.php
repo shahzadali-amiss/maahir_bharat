@@ -8,13 +8,13 @@
                     <div class="navbar-header">
                         <button type="button" class="btn btn-navbar navbar-toggle" id="btnMenuBar">
                             <i class="fa fa-bars" aria-hidden="true"></i>
-                            <span class="text-menu hidden-xs hidden-sm">
-                                <!-- Mahir Bharat -->
-                                <a href="{{ route('guest-home') }}">
-                                  <img class="site_logo" id="logo" src="{{ asset('img/logo-dark.png') }}" alt="MAAHIR BHARAT" style="max-width: 200px;">
-                                </a>
-                            </span>
                         </button>
+                        <div class="text-menu hidden-xs hidden-sm">
+                            <!-- Mahir Bharat -->
+                            <a href="{{ route('guest-home') }}">
+                              <img class="site_logo" id="logo" src="{{ asset('img/logo-dark.png') }}" alt="MAAHIR BHARAT" style="max-width: 200px;">
+                            </a>
+                        </div>
                     </div>
                     <div id="topCategoryList" class="main-menu menu-navbar clearfix" data-more="More">
                         <div class="menu-close"><span id="category" class="">Mahir Bharat</span>
@@ -238,8 +238,10 @@
                         <div id="cart" class="btn-group btn-block">
                             <a href="{{ route('cart') }}" class="btn btn-inverse btn-block btn-lg">
                             <span id="cart-total">
-                                <span class="hidden-sm hidden-xs">My Cart
-                                </span>
+                                <span class="hidden-sm hidden-xs">My Cart</span>
+
+                                <span class="cart_count badge"></span>
+                                
                                 <!-- <i class="fa fa-angle-down"></i> -->
                             </span>
                             </a>
@@ -250,6 +252,13 @@
                             </ul> -->
                         </div>
                     </div>
+
+                    <div class="alert item_added_into_cart">
+                        <p class="success">
+                            <span>Item added into Cart</span>
+                        </p>
+                    </div>
+
                     @endif
                     
                     <div id="header_ac" class="dropdown">
@@ -288,6 +297,10 @@
         </div>
     </div>
 </nav>
+
+<input type="hidden" id="user_id" value="{{ Auth::check() ? Auth::user()->id : '' }}">
+<input type="hidden" id="visitor_id" value="{{ Cookie::get('visitor_id') }}">
+
 <script>
     <!--
         $(document).ready(function(){

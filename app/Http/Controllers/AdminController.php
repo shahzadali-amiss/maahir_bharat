@@ -187,6 +187,8 @@ class AdminController extends Controller
         $data['products'] = Product::orderBy('id', 'desc')->get();
         $data['categories'] = \App\Models\Category::all();
         
+        // dd($data);
+
         return view('admin.all-products', $data);
           
     }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,6 @@ Route::get('/get-category/{parentId}/{type}', [Controller::class, 'getchildbypar
 Route::get('/get-cities-from-state/{id}', [Controller::class, 'getcitiesfromstate']);
 //Route::delete('/delete-product-image/{id}', [Controller::class, 'deleteProductImage']);
 //Route::post('/home/addtocart', [Controller::class, 'addtocart']);
+
+Route::post('add_to_cart', [ApiController::class, 'addItemIntoCart']);
+Route::get('get_cart_items', [ApiController::class, 'getCartItems']);

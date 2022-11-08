@@ -58,6 +58,7 @@ Route::any('/supplier/login', [FrontController::class, 'sellerLogin'])->name('se
 Route::get('shop/product/single/{id?}',[FrontController::class , 'showSingle'])->name('single'); 
 Route::get('shop/products/{gid}/{pid?}/{cid?}', [FrontController::class , 'products'])->name('products');
 Route::get('shop/products', [FrontController::class , 'allProducts'])->name('all-products');  
+Route::get('shop/{id}/seller', [FrontController::class , 'sellerStore'])->name('store');  
 
 //GUEST ROUTES ENDS HERE
 

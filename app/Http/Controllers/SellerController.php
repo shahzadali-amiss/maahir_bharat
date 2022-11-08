@@ -12,8 +12,7 @@ use App\Models\Order;
 use App\Models\User;  
 use App\Models\Bank; 
 use App\Models\City; 
-use App\Models\Address;  
-// use App\Models\Supplier;  
+use App\Models\Address;   
 use App\Models\Attribute; 
 use App\Models\Attribute_value; 
 use App\Models\Product_attribute;
@@ -29,6 +28,11 @@ class SellerController extends Controller
     }
 
     public function index(Request $request){
+
+        // GET STORE DETAILS IF NOT EXIST
+        if(Supplier::where('role_id', Auth::user()->id)->count() == 0)
+            return $this->account($request);
+
     	return view('seller.dashboard');
     }
 

@@ -3,7 +3,13 @@
 <div class="container mb-5 pb-3">
   <div class="bg-light shadow-lg rounded-3 overflow-hidden">
     <div class="row"> 
-      @include('inc.seller-sidebar')
+      
+      @if(Auth::check() && Auth::user()->role == 's')
+      
+        @include('inc.seller-sidebar')
+
+      @endif
+
       @yield('content')
     </div>
   </div>
