@@ -64,12 +64,12 @@
                             <div class="footer-content">
                                 <h5>Information</h5>
                                 <ul class="list-unstyled">
-                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="{{ route('about') }}">About Us</a></li>
                                     <li><a href="{{ route('policy', 'shipping') }}">Shipping Policy</a></li>
                                     <li><a href="{{ route('policy', 'returns') }}">Return & Refund Policy</a></li>
                                     <li><a href="{{ route('policy', 'supplier') }}">Supplier Policy</a></li>
                                     <li><a href="{{ route('policy', 'buyer') }}">Buyer Policy</a></li>
-                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="{{ route('contact') }}">Contact Us</a></li>
                                 </ul>
                             </div>
                         </div>

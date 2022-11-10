@@ -33,7 +33,9 @@ Route::get('/dashboard', function () {
 //GUEST ROUTES STARTS HERE
 // route that returns the website landing page 
 Route::get('/', [FrontController::class, 'index'])->name('guest-home');
-Route::get('policy/{id?}',[FrontController::class , 'policy'])->name('policy'); 
+Route::get('policy/{id?}',[FrontController::class , 'policy'])->name('policy');
+Route::get('about',[FrontController::class , 'about'])->name('about'); 
+Route::get('contact',[FrontController::class , 'contact'])->name('contact'); 
 
 Route::get('state-suppliers/{id}', [FrontController::class, 'getStateAccording'])->name('state-suppliers');
 

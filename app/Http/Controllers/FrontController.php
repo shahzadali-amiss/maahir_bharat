@@ -35,6 +35,14 @@ class FrontController extends Controller
         return view('front.policies.'.$type);
     }
 
+    public function contact(){
+        return view('front.contact');
+    }
+
+    public function about(){
+        return view('front.about');
+    }
+
     public function customerRegister(Request $request){
         if($request->isMethod('get')){
             Session::forget(['supplier','customer']);    
