@@ -68,4 +68,8 @@
     </div>
   </div>
 </aside>
-
+<style>
+  a.nav-link-style:focus {
+    color: #ff0027!important;
+  }
+</style>

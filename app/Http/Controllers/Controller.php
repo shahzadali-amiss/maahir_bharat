@@ -75,7 +75,7 @@ class Controller extends BaseController
     }
 
     public function getAllData(){
-            $data['products'] = Product::where(['status'=>1])->get();
+            $data['products'] = Product::where(['status'=>1])->with('reviews')->get();
             $data['t_products'] = Product::inRandomOrder()->limit(8)->get();
             $data['categories'] = Category::where(['status'=>1])->get();
             $data['grands'] = Category::where(['category_type'=>1,'status'=>1])->get();

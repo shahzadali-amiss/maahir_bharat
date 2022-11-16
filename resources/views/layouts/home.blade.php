@@ -8,7 +8,6 @@
         <title>MAHIR BHARAT</title>
         <base />
         <meta name="description" content="My Store" />
-        <link rel="stylesheet" type="text/css" href="{{asset('css/custom-responsive.css')}}">
         <script src="{{asset('catalog/view/javascript/jquery/jquery-2.1.1.min.js')}}"></script>
         <link href="{{asset('catalog/view/javascript/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen" />
         <script src="{{asset('catalog/view/javascript/bootstrap/js/bootstrap.min.js')}}"></script>
@@ -116,6 +115,7 @@
                     }
         </style>
         <link rel="stylesheet" href="css/map_custom.css">
+        <link rel="stylesheet" type="text/css" href="{{asset('css/custom-responsive.css')}}">
     </head>
     <body class="common-home">
         <div class="loader"></div>

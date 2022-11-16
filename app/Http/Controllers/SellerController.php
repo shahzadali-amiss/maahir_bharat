@@ -16,7 +16,8 @@ use App\Models\Address;
 use App\Models\Attribute; 
 use App\Models\Attribute_value; 
 use App\Models\Product_attribute;
-use Illuminate\Support\Facades\Hash; 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator; 
 // use App\Models\ProductAttributeValue; 
 use Session;
 use Auth;
@@ -333,123 +334,267 @@ class SellerController extends Controller
         }
     }
 
-    public function account(Request $request){
-        if($request->isMethod('get')){
-            $data = $this->getAllData(); 
+    public function account(Request $request, $typ=null){
+        $data = $this->getAllData(); 
             $data['bank']=Bank::where('role_id',Auth::user()->id)->first();
             $data['pick_address']=Address::where(['role_id'=>Auth::user()->id, 'type'=>'pickup'])->first();
             $data['reg_address']=Address::where(['role_id'=>Auth::user()->id, 'type'=>'registered'])->first();
             $data['states']=State::where(['status'=>true])->get();
+
+        if($request->isMethod('get')){           
+            $data['typ']=$typ;
+
             return view('seller.my-account')->with($data);
         }else{
-            $request->validate([
-                'gst_number'=>'required',
-                'business_name'=>'required',
-                'pan_number'=>'required', 
-                // 'business_type'=>'required',
-                // 'business_address'=>'required',
-                // 'state'=>'required', 
-                // 'city'=>'required',
-                // 'pincode'=>'required|digits:6',
-                // 'address'=>'required',
-                // 'account_holder_name'=>'required',
-                // 'bank_name'=>'required',
-                // 'account_number'=>'required',
-                // 'ifsc_code'=>'required',
-                // 'name'=>'required',
-                'email'=>'required|email',
-                'mobile'=>'required|numeric|digits:10',
-
-            ]);
-            // dd($request->all());
-            if($request->image){
+            //save basic details here...
+            // dd($request->all(), $typ);
+            if($typ=='basic'){
                 $request->validate([
-                    'image'=>'mimes:jpeg,png,jpg|max:1024|dimensions:ratio=1/1',
-                ]);
-            }
-
-            if ($request->i_agree=='on') {
+                    'name'=>'required',
+                    ]);
+                if($request->image){
+                  $request->validate([
+                    'image'=>'mimes:jpeg,png,jpg|max:1024',
+                    ]);
+                }
+                if($request->mobile){
+                  $request->validate([
+                    'mobile'=>'required|numeric|digits:10',
+                    ]);
+                }  
                 $supplier = Supplier::where('role_id', Auth::user()->id)->first();
                 if(!$supplier){
                     $supplier = new Supplier();
                 }
-
-                $pick_address = Address::where(['role_id'=>Auth::user()->id, 'type'=>'pickup'])->first();
-                if(!$pick_address){
-                    $pick_address = new Address();   
-                }
-
-                $reg_address = Address::where(['role_id'=>Auth::user()->id, 'type'=>'registered'])->first();
-                // dd($reg_address);
-                if(!$reg_address){
-                    $reg_address = new Address();   
-                }
-
-                $bank=Bank::where(['account_number'=>$request->account_number, 'role_id'=>Auth::user()->id])->first();
-                if(!$bank){
-                    $bank = new Bank();   
-                }
-
-                $user=User::find(Auth::user()->id);
-                $user->name=$request->name;
-                Session::put('supplier.name', $request->name);
-
-                $supplier->role_id=Auth::user()->id;
-                $supplier->gst_no=$request->gst_number;
-                $supplier->business_name=$request->business_name;
-                $supplier->pan_no=$request->pan_number;
-                $supplier->business_type=$request->business_type ?? 'N/A';
-                $supplier->supplier_name=$request->name;
-                $supplier->state=$request->state;
-                $supplier->city=$request->city;
-                $supplier->supplier_mobile=$request->mobile;
-                
-                $reg_address->type='registered';
-                $reg_address->role_id=Auth::user()->id;
-                $reg_address->name=$request->business_name;
-                $reg_address->email=Auth::user()->email;
-                $reg_address->mobile=$request->mobile;
-                $reg_address->address=$request->business_address;
-                
-                $pick_address->type='pickup';
-                $pick_address->role_id=Auth::user()->id;
-                $pick_address->name=$request->business_name;
-                $pick_address->email=Auth::user()->email;
-                $pick_address->mobile=$request->mobile;
-                $pick_address->state=$request->state;
-                $pick_address->city=$request->city;
-                $pick_address->pincode=$request->pincode;
-                $pick_address->address=$request->address;
-
-                $bank->role_id=Auth::user()->id;
-                $bank->name=$request->account_holder_name;
-                $bank->account_name=$request->bank_name;
-                $bank->account_number=$request->account_number;
-                $bank->ifsc=$request->ifsc_code;
-                $bank->status=true;
-
                 if($request->image){
                     $destinationPath = public_path( '/supplier_images' );
                     $image = $request->image;
                     $fileName = 'sup'.rand(11111111111111,99999999999999). '.'.$image->clientExtension();
                     $image->move( $destinationPath, $fileName );
                     // dd($supplier->image);
-                    if($supplier->image!='default.jpg' && !is_null($supplier->image)){
+                    if($supplier->image!='default.png' && !is_null($supplier->image)){
                         unlink(public_path('supplier_images/'.$supplier->image));
                     }
                     $supplier->image=$fileName;
                 }
+                $user=User::find(Auth::user()->id);
+                $user->name=$request->name;
+                $user->mobile=$request->mobile;
+                Session::put('supplier.name', $request->name);
+                $supplier->role_id=Auth::user()->id;
+                $supplier->supplier_name=$request->name;
+                $supplier->supplier_mobile=$request->mobile;
+                if($supplier->save() && $user->save()){
+                    $data['typ']=$typ;
+                    $data['typ'] = 'gst';
+                    return view('seller.my-account', $data)->with('success', 'Account Updated');
+                }
+                return back()->with('status', 'Something went wrong! Please try again.');
+            }
+            if($typ=='gst'){
+                // dd($request->all());
+                $validator = Validator::make($request->all(), [
+                       'gst_number'=>'required',
+                       // 'business_name'=>'required',
+                       // 'pan_number'=>'required'
+                   ]);
+                 if(!$validator){
+                    $data['typ']=$typ;
+                    return view('seller.my-account')->with($data);
+                 }
+               $supplier = Supplier::where('role_id', Auth::user()->id)->first();
+                if(!$supplier){
+                    $supplier = new Supplier();
+                }
+               $reg_address = Address::where(['role_id'=>Auth::user()->id, 'type'=>'registered'])->first();
+                // dd($reg_address);
+                if(!$reg_address){
+                    $reg_address = new Address();   
+                }
+                $supplier->role_id=Auth::user()->id;
+                $supplier->gst_no=$request->gst_number;
+                $supplier->pan_no=$request->pan_number;
+                $supplier->business_name=$request->business_name;
+                $supplier->business_type=$request->business_type ?? 'N/A';
 
-                if($supplier->save() && $reg_address->save() && $pick_address->save() && $bank->save() && $user->save()){
+                $reg_address->type='registered';
+                $reg_address->role_id=Auth::user()->id;
+                $reg_address->name=$request->business_name;
+                $reg_address->email=Auth::user()->email;
+                $reg_address->mobile=Auth::user()->mobile;
+                $reg_address->address=$request->business_address;
 
-                    return back()->with('success', 'Account Updated');
+                if($supplier->save() && $reg_address->save()){
+                    $data['typ']=$typ;
+                    $data['typ'] = 'pickup';
+                    return view('seller.my-account', $data)->with('success', 'Account Updated');
+                }
+                return back()->with('status', 'Something went wrong! Please try again.');
+            }
+            if ($typ=='pickup') {
+
+                $validate=$request->validate([
+                   'state'=>'required',
+                   'city'=>'required',
+                   // 'business_name'=>'required', 
+               ]);
+                if(!$validate){
+                    dd("error");
+                }
+                $pick_address = Address::where(['role_id'=>Auth::user()->id, 'type'=>'pickup'])->first();
+                if(!$pick_address){
+                    $pick_address = new Address();   
+                }
+                $pick_address->type='pickup';
+                $pick_address->role_id=Auth::user()->id;
+                $pick_address->name=Address::where(['role_id'=>Auth::user()->id, 'type'=>'registered'])->first()->name;
+                $pick_address->email=Auth::user()->email;
+                $pick_address->mobile=Auth::user()->mobile;
+                $pick_address->state=$request->state;
+                $pick_address->city=$request->city;
+                $pick_address->pincode=$request->pincode;
+                $pick_address->address=$request->address;
+                if($pick_address->save() ){
+                    $data['typ']=$typ;
+                    $data['typ'] = 'bank';
+                    return view('seller.my-account', $data)->with('success', 'Account Updated');
                 }
                 return back()->with('status', 'Something went wrong! Please try again.');
 
-            }else{
-                return back()->with('status', 'You cannot proceed without agreeing out terms and conditions.');                
             }
-        }
+            if ($typ=='bank') {
+                $request->validate([
+                   // 'ifsc'=>'required',
+               ]);
+                $bank=Bank::where(['account_number'=>$request->account_number, 'role_id'=>Auth::user()->id])->first();
+                if(!$bank){
+                    $bank = new Bank();   
+                }
+                $bank->role_id=Auth::user()->id;
+                $bank->name=$request->account_holder_name;
+                $bank->account_name=$request->bank_name;
+                $bank->account_number=$request->account_number;
+                $bank->ifsc=$request->ifsc_code;
+                $bank->status=true;
+                if($bank->save() ){
+                    $data['typ']=$typ;
+                    $data['typ'] = null;
+                    return view('seller.my-account', $data)->with('success', 'Account Updated');
+                }
+                return back()->with('status', 'Something went wrong! Please try again.');
+
+            }
+
+        } 
+        //     return view('seller.my-account')->with($data);
+        //     $request->validate([
+        //         'gst_number'=>'required',
+        //         'business_name'=>'required',
+        //         'pan_number'=>'required', 
+        //         // 'business_type'=>'required',
+        //         // 'business_address'=>'required',
+        //         // 'state'=>'required', 
+        //         // 'city'=>'required',
+        //         // 'pincode'=>'required|digits:6',
+        //         // 'address'=>'required',
+        //         // 'account_holder_name'=>'required',
+        //         // 'bank_name'=>'required',
+        //         // 'account_number'=>'required',
+        //         // 'ifsc_code'=>'required',
+        //         // 'name'=>'required',
+        //         'email'=>'required|email',
+        //         'mobile'=>'required|numeric|digits:10',
+
+        //     ]);
+        //     // dd($request->all());
+        //     if($request->image){
+        //         $request->validate([
+        //             'image'=>'mimes:jpeg,png,jpg|max:1024|dimensions:ratio=1/1',
+        //         ]);
+        //     }
+
+        //     if ($request->i_agree=='on') {
+        //         $supplier = Supplier::where('role_id', Auth::user()->id)->first();
+        //         if(!$supplier){
+        //             $supplier = new Supplier();
+        //         }
+
+                // $pick_address = Address::where(['role_id'=>Auth::user()->id, 'type'=>'pickup'])->first();
+                // if(!$pick_address){
+                //     $pick_address = new Address();   
+                // }
+
+        //         $reg_address = Address::where(['role_id'=>Auth::user()->id, 'type'=>'registered'])->first();
+        //         // dd($reg_address);
+        //         if(!$reg_address){
+        //             $reg_address = new Address();   
+        //         }
+
+        //         $bank=Bank::where(['account_number'=>$request->account_number, 'role_id'=>Auth::user()->id])->first();
+        //         if(!$bank){
+        //             $bank = new Bank();   
+        //         }
+
+        //         $user=User::find(Auth::user()->id);
+        //         $user->name=$request->name;
+        //         Session::put('supplier.name', $request->name);
+
+                // $supplier->role_id=Auth::user()->id;
+                // $supplier->gst_no=$request->gst_number;
+                // $supplier->business_name=$request->business_name;
+                // $supplier->pan_no=$request->pan_number;
+                // $supplier->business_type=$request->business_type ?? 'N/A';
+                // $supplier->supplier_name=$request->name;
+                // $supplier->state=$request->state;
+                // $supplier->city=$request->city;
+                // $supplier->supplier_mobile=$request->mobile;
+                
+                // $reg_address->type='registered';
+                // $reg_address->role_id=Auth::user()->id;
+                // $reg_address->name=$request->business_name;
+                // $reg_address->email=Auth::user()->email;
+                // $reg_address->mobile=$request->mobile;
+                // $reg_address->address=$request->business_address;
+                
+                // $pick_address->type='pickup';
+                // $pick_address->role_id=Auth::user()->id;
+                // $pick_address->name=$request->business_name;
+                // $pick_address->email=Auth::user()->email;
+                // $pick_address->mobile=$request->mobile;
+                // $pick_address->state=$request->state;
+                // $pick_address->city=$request->city;
+                // $pick_address->pincode=$request->pincode;
+                // $pick_address->address=$request->address;
+
+                // $bank->role_id=Auth::user()->id;
+                // $bank->name=$request->account_holder_name;
+                // $bank->account_name=$request->bank_name;
+                // $bank->account_number=$request->account_number;
+                // $bank->ifsc=$request->ifsc_code;
+                // $bank->status=true;
+
+        //         if($request->image){
+        //             $destinationPath = public_path( '/supplier_images' );
+        //             $image = $request->image;
+        //             $fileName = 'sup'.rand(11111111111111,99999999999999). '.'.$image->clientExtension();
+        //             $image->move( $destinationPath, $fileName );
+        //             // dd($supplier->image);
+        //             if($supplier->image!='default.jpg' && !is_null($supplier->image)){
+        //                 unlink(public_path('supplier_images/'.$supplier->image));
+        //             }
+        //             $supplier->image=$fileName;
+        //         }
+
+        //         if($supplier->save() && $reg_address->save() && $pick_address->save() && $bank->save() && $user->save()){
+
+        //             return back()->with('success', 'Account Updated');
+        //         }
+        //         return back()->with('status', 'Something went wrong! Please try again.');
+
+        //     }else{
+        //         return back()->with('status', 'You cannot proceed without agreeing out terms and conditions.');                
+        //     }
+        // }
     }
 
     public function settings(Request $request){

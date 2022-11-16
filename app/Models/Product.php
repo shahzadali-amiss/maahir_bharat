@@ -13,6 +13,10 @@ class Product extends Model
         return $this->hasOne(Supplier::class, 'role_id', 'role_id');
     }
 
+    function reviews(){
+        return $this->hasMany(Review::class, 'product_id', 'id');
+    }
+
     function user(){
         return $this->hasOne(User::class, 'id', 'role_id');
     }

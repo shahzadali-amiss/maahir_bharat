@@ -42,8 +42,18 @@
       }
     }
 .checkout-back-bt{
-	padding: 8px 20px !important;
-	border: 2px solid #e3e9ef !important;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 8px 30px;
+    border: 2px solid #da4f49;
+    color: var(--secondary-color);
+    background: #da4f49;
+    border-radius: 0;
+    font-weight: 400;
+    cursor: pointer;
+}
+.checkout-back-bt:hover{
+  background: transparent;
 }
 .sup_profile_img {
     height: 72px;

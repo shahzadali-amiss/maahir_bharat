@@ -40,7 +40,7 @@ Route::get('contact',[FrontController::class , 'contact'])->name('contact');
 Route::get('state-suppliers/{id}', [FrontController::class, 'getStateAccording'])->name('state-suppliers');
 
 // route for registration as a customer
-// Route::any('register', [FrontController::class, 'customerRegister'])->name('customer_register');
+Route::any('register', [FrontController::class, 'customerRegister'])->name('customer_register');
 // route for login as a customer
 // Route::any('login', [FrontController::class, 'customerLogin'])->name('customer_login');
 
@@ -61,6 +61,7 @@ Route::get('shop/product/single/{id?}',[FrontController::class , 'showSingle'])-
 Route::get('shop/products/{gid}/{pid?}/{cid?}', [FrontController::class , 'products'])->name('products');
 Route::get('shop/products', [FrontController::class , 'allProducts'])->name('all-products');  
 Route::get('shop/{id}/seller', [FrontController::class , 'sellerStore'])->name('store');  
+Route::post('shop/product/review', [FrontController::class , 'review'])->name('review');  
 
 //GUEST ROUTES ENDS HERE
 
@@ -82,6 +83,7 @@ Route::group(['middleware' => 'CustomerAuth'], function(){
     Route::any('shop/checkout/payment-gateway', [HomeController::class, 'paymentGateway'])->name('payment-gateway');
     Route::get('shop/checkout/complete', [HomeController::class, 'checkoutComplete'])->name('checkout-complete');
     Route::get('shop/cart/delete-product/{id}', [HomeController::class, 'deleteCartProduct'])->name('delete-cart-product');
+    Route::post('shop/cart/update-quantity', [HomeController::class, 'updateQuantity'])->name('update-quantity');   
 });
 //CUSTOMER AUTH ROUTES END
 
@@ -103,11 +105,12 @@ Route::group(['middleware' => 'WhoU'], function(){
     Route::get('supplier/payouts', [SellerController::class, 'payouts'])->name('seller-payouts');
     Route::get('supplier/orders/{type}', [SellerController::class, 'orders'])->name('seller-orders');
     Route::post('supplier/move-to-complete-order', [SellerController::class, 'moveToCompleteOrder'])->name('move-to-complete-order');
-    Route::any('supplier/my-account', [SellerController::class, 'account'])->name('seller-account');
+    Route::any('supplier/my-account/{typ?}', [SellerController::class, 'account'])->name('seller-account');
     Route::get('supplier/settings', [SellerController::class, 'settings'])->name('seller-settings');
     Route::get('supplier/purchases', [SellerController::class, 'purchases'])->name('seller-purchases'); 
     Route::get('supplier/favorites', [SellerController::class, 'favorites'])->name('seller-favorites');
     Route::any('supplier/seller-change-password', [SellerController::class, 'changePassword'])->name('seller-change-password');
+
 });
 
 //SUPPLIER AUTH ROUTES END

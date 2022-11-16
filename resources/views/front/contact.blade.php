@@ -15,7 +15,8 @@
                     </p>
                     <p>
                         <b>Address:</b> S -14 Super Mall, Salunkhe vihar road , Pune<br>
-                        <b>Email: </b><a href="mailto:hello@maahirbharat.com">hello@maahirbharat.com</a>
+                        <b>Email: </b><a href="mailto:hello@maahirbharat.com">hello@maahirbharat.com</a><br>
+                        <b>Contact: </b>+91 9582926042
                     </p>
                 </div>
 

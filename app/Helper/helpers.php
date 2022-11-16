@@ -134,7 +134,7 @@ function getCartQuantity(){
 
 function getCartProductQuantity($pid){
     // $quantities=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $pid])->get();
-    $quantities = \App\Models\Order::visitor(request())->where('is_in_cart', true)->get();
+    $quantities = \App\Models\Order::visitor(request())->where('is_in_cart', true)->where('product_id',$pid)->get();
     if(!$quantities->isEmpty())
         $i=$quantities[0]->quantity;
 

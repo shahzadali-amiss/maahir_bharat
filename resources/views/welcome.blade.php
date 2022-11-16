@@ -207,8 +207,8 @@
                                   <div class="product-thumb transition clearfix">
                                       <div class="image">
                                           <a href="{{ route('single', $product->id) }}">
-                                              <img src="{{asset('product_images/'.$product->image)}}" alt="Aviator Classic" title="Aviator Classic" class="img-responsive" />
-                                              <img class="img-responsive hover-img" src="{{asset('product_images/'.$product->image)}}" title="Aviator Classic" alt="Aviator Classic" />
+                                              <img src="{{asset('product_images/'.$product->image)}}" class="img-responsive" />
+                                              <img class="img-responsive hover-img" src="{{asset('product_images/'.$product->image)}}" title="{{ $product->name }}" />
                                           </a>
                                           <div class="sale-text"></div>
                                           <form method="post" action="{{ route('addtocart') }}">
@@ -229,15 +229,6 @@
                                                   @endforeach
                                               @endif
                                               
-                                             {{-- @if($is_in_cart)
-                                                <a class="addcart" href="{{ route('cart') }}">
-                                                  Go to cart<i class="ci-arrow-right fs-lg me-2"></i>
-                                                </a>
-                                              @else
-                                                <a href="{{ route('single', $product->id)}}" class="addcart d-none" title="Add to Cart" id="tocart">Add to Cart</a>
-
-                                                <button class="addcart" title="Add to Cart" onclick="event.preventDefault(); document.getElementById('tocart').click();">Add to Cart</button>
-                                              @endif --}}
                                           </form>
                                       </div>
                                       <div class="thumb-description clearfix">
@@ -251,12 +242,39 @@
                                                   {{ (integer) $decount }}% off
                                                 </span>
                                               </p>
+                                               {{-- {{ dd($products[0]->reviews) }}  --}} 
+                                              @php 
+                                                $pr = $product->reviews ;
+                                                $subTotalOfRating = 0;
+                                                $baseRating = 0;
+                                                $totalRating = $pr!=null && count($pr)>0 ? $pr : [];
+                                                if(count($totalRating)>0){
+                                                    foreach($totalRating as $r){
+                                                        $subTotalOfRating += $r->rating;
+                                                    }
+                                                    $baseRating = $subTotalOfRating / count($totalRating);
+                                                }
+                                              @endphp
+                                              @if($baseRating > 0)
+                                                <div class="rating">
+                                                  @for($i=1;$i<6;$i++)
+                                                     @if(round($baseRating, 0, PHP_ROUND_HALF_UP)<$i)
+                                                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>  
+                                                     @else  
+                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                                                        class="fa fa-star-o fa-stack-1x"></i></span>
+                                                     @endif 
+                                                  @endfor 
+                                                </div>
+                                              @else 
                                               <div class="rating">
                                                   <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
                                                   <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
-                                                  <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                                  <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                                  <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> 
                                                   <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
                                               </div>
+                                              @endif
                                           </div>
                                       </div>
                                   </div>
@@ -278,7 +296,7 @@
                                 <div class="category-layout col-xs-12">
                                     <div class="category-thumb clearfix">
                                         <div class="images-hover image">
-                                            <a href="index70a9.html?route=product/category&amp;path=57">
+                                            <a href="{{ route('products', [$g->id]) }}">
                                                 <img src="{{asset('category_images/'.$g->image)}}" alt="{{ $g->name }}" title="{{ $g->name }}" class="img-responsive" />
                                             </a>
                                         </div>

@@ -28,6 +28,7 @@
 <div id="product-page" class="container">
   <div class="row">
     <div id="content" class="col-sm-12" style="background-color: aliceblue; padding: 10px 25px 30px 25px;">
+    @include('inc.session-message')
       <!-- <h2 class="page_title">{{ucwords($product->name)}}</h2> -->
       <div class="pro-deatil row">
         <div class="col-sm-6 product-img" style="margin-top: 20px">
@@ -72,25 +73,29 @@
             {{ ucwords($product->name) }}
           </h2>
           
-          <!-- <div class="rating clearfix">
+          <div class="rating clearfix">
+            @if($baseRating!=null && $baseRating > 0)
             <div class="product-rating">
-              <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
-                  class="fa fa-star-o fa-stack-1x"></i></span>
-              <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
-                  class="fa fa-star-o fa-stack-1x"></i></span>
-              <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
-                  class="fa fa-star-o fa-stack-1x"></i></span>
-              <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> <span
-                class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+              @for($i=1;$i<6;$i++)
+               {{-- {{ round($totalRating, 0, PHP_ROUND_HALF_UP) }} --}}
+                 @if(round($baseRating, 0, PHP_ROUND_HALF_UP)<$i)
+                    <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>  
+                 @else  
+                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                    class="fa fa-star-o fa-stack-1x"></i></span>
+                 @endif 
+              @endfor
+              <span style="color: green;"> &nbsp &nbsp {{ round($baseRating ,1,PHP_ROUND_HALF_UP) }} Ratings</span>  
             </div>
+            @endif
             <a href="" class="reviews"
-              onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">4
+              onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">{{ count($product->reviews) }}
               reviews</a>
             <a href="" class="write-review"
               onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;"><i
                 class="fa fa-pencil" aria-hidden="true"></i>Write a review</a>
           </div>
-          <hr>
+          {{-- <hr>
           <ul class="list-unstyled">
             <li><span class="disc">Brand:</span> <a class="disc1"
                 href="">Canon</a>
@@ -99,7 +104,7 @@
             <li><span class="disc">Reward Points:</span><span class="disc1"> 200</span></li>
             <li><span class="disc">Availability:</span><span class="disc1"> In Stock</span></li>
           </ul>
-          <hr> -->
+          <hr> --}}
 
           <br><hr>
 
@@ -251,73 +256,108 @@
 </div>
 
 <div class="container">
-
+{{-- {{ dd($) }} --}}
   <div class="col-sm-12">
-            <div class="row propage-tab">
-              <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
-                <li><a href="#tab-review" data-toggle="tab">Reviews (1)</a></li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane active" id="tab-description">
-                  <p>
-                    {{ $product->description }}</p>
-                </div>
-                <div class="tab-pane" id="tab-review">
-                  <form class="form-horizontal" id="form-review">
-                    <div id="review"></div>
-                    <h2>Write a review</h2>
-                    <div class="form-group required">
-                      <div class="col-sm-2">
-                        <label class="control-label" for="input-name">Your Name</label>
-                      </div>
-                      <div class="col-sm-10">
-                        <input type="text" name="name" value="" id="input-name"
-                          class="form-control" />
-                      </div>
-                    </div>
-                    <div class="form-group required">
-                      <div class="col-sm-2">
-                        <label class="control-label" for="input-review">Your Review</label>
-                      </div>
-                      <div class="col-sm-10">
-                        <textarea name="text" rows="5" id="input-review"
-                          class="form-control"></textarea>
-                        <div class="help-block"><span class="text-danger">Note:</span> HTML is not
-                          translated!
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group required">
-                      <div class="col-sm-2">
-                        <label class="control-label">Rating</label>
-                      </div>
-                      <div class="col-sm-10">
-                        &nbsp;&nbsp;&nbsp; Bad&nbsp;
-                        <input type="radio" name="rating" value="1" />
-                        &nbsp;
-                        <input type="radio" name="rating" value="2" />
-                        &nbsp;
-                        <input type="radio" name="rating" value="3" />
-                        &nbsp;
-                        <input type="radio" name="rating" value="4" />
-                        &nbsp;
-                        <input type="radio" name="rating" value="5" />
-                        &nbsp;Good
-                      </div>
-                    </div>
+    <div class="row propage-tab">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
+        <li><a href="#tab-review" data-toggle="tab">Reviews ({{ count($product->reviews) }})</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-description">
+          <p>{{ $product->description }}</p>
+        </div>
+        <div class="tab-pane" id="tab-review">
+          <div class="row">
 
-                    <div class="buttons clearfix">
-                      <div class="pull-right">
-                        <button type="button" id="button-review" data-loading-text="Loading..."
-                          class="btn btn-primary">Continue</button>
-                      </div>
-                    </div>
-                  </form>
+           @foreach($product->reviews as $review)
+            <div class="col-sm-12 col-md-4 border mt-2" style="background-color: #fff">
+              <div class="row py-3">
+                <div class="col-12">
+                  <img src="{{asset('images/profile-icon.png')}}" class="review_profile_img">
+                  <div class="rating clearfix" style="display: inline-block; position: relative; top: 12px;">
+                    <div class="">
+                      @for($i=1;$i<6;$i++)
+                       @if($review->rating<$i)
+                          <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>  
+                       @else  
+                          <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                          class="fa fa-star-o fa-stack-1x"></i></span>
+                       @endif 
+                      @endfor
+                      @php $date = date('d-M-y', strtotime($review['created_at']))@endphp
+                      {{-- <span style="color: green;"> &nbsp &nbsp {{ $review->rating }} Ratings</span> --}}
+                       <p class="text-muted">{{ $date }} &nbsp &nbsp {{ $review->name }}</p>  
+                    </div> 
+                  </div>                 
+                </div>
+                <div class="col-12" style="display: table;">
+                  <div style="vertical-align: middle; display: table-cell;">
+                    <a href="" class="reviews mt-2"
+                      onclick="$('a[href=\'#tab-review\']').trigger('click'); $('body,html').animate({scrollTop: $('.nav-tabs').offset().top}, 800); return false;">{{ $review->review }}</a>
+                  </div>
                 </div>
               </div>
             </div>
+            @endforeach
           </div>
+          <form action="{{ route('review') }}" method="post" class="form-horizontal" id="form-review">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            <input type="hidden" name="role_id" value="{{ $product->role_id }}">
+            <div id="review"></div>
+            <h2>Write a review</h2>
+            <div class="form-group required">
+              <div class="col-sm-2">
+                <label class="control-label" for="input-name">Your Name</label>
+              </div>
+              <div class="col-sm-10">
+                <input type="text" name="name" value="" id="input-name"
+                  class="form-control" required />
+              </div>
+            </div>
+            <div class="form-group required">
+              <div class="col-sm-2">
+                <label class="control-label" for="input-review">Your Review</label>
+              </div>
+              <div class="col-sm-10">
+                <textarea name="review" rows="5" id="input-review"
+                  class="form-control"></textarea>
+                <div class="help-block"><span class="text-danger">Note:</span> HTML is not
+                  translated!
+                </div>
+              </div>
+            </div>
+            <div class="form-group required">
+              <div class="col-sm-2">
+                <label class="control-label">Rating</label>
+              </div>
+              <div class="col-sm-10">
+                &nbsp;&nbsp;&nbsp; Bad&nbsp;
+                <input type="radio" name="rating" value="1" />
+                &nbsp;
+                <input type="radio" name="rating" value="2" />
+                &nbsp;
+                <input type="radio" name="rating" value="3" />
+                &nbsp;
+                <input type="radio" name="rating" value="4" required/>
+                &nbsp;
+                <input type="radio" name="rating" value="5" />
+                &nbsp;Good
+              </div>
+            </div>
+
+            <div class="buttons clearfix">
+              <div class="pull-right">
+                <button type="submit" id="button-review" data-loading-text="Loading..."
+                  class="btn btn-primary">Continue</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="related-products-block box">
     <div class="box-content">
@@ -507,3 +547,14 @@
   });
 </script>
 @endsection
+@push('styles')
+<style>
+.review_profile_img {
+    height: 52px;
+    width: 52px;
+    border-radius: 50%;
+    background-position: center center / contain no-repeat;
+    background: #e8e3e3;
+}
+</style>
+@endpush

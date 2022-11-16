@@ -21,6 +21,7 @@
         </select>
       </div> -->
 
+      {{-- {{ dd($grands) }} --}}
       <div class="input-group d-none d-lg-flex flex-nowrap mx-4">
       <!-- Departments menu-->
         <ul class="navbar-nav navbar-mega-nav pe-lg-2 me-lg-2">
@@ -29,7 +30,7 @@
               @foreach($grands as $gc)
               <li class="dropdown mega-dropdown"><a class="dropdown-item dropdown-toggle" href="{{ route('products', $gc->id) }}" data-bs-toggle="dropdown"><!-- <i class="{{getGrandCategoryIcon($gc->id)}} opacity-60 fs-lg mt-n1 me-2"></i> -->
               {{ucwords($gc->name)}}</a>
-                <div class="dropdown-menu p-0">
+                <div class="dropdown-menu  p-0">
                   <div class="d-flex flex-wrap flex-sm-nowrap px-2">
                     @foreach($gc->childs as $pc)
 
@@ -51,8 +52,9 @@
 
                     @endforeach                                                       
 
-                    <div class="mega-dropdown-column d-none d-lg-block py-4 text-center"><a class="d-block mb-2" href="#"><img src="{{asset('img/shop/departments/07.jpg')}}" alt="Computers &amp; Accessories"></a>
-                      <div class="fs-sm mb-3">Starting from <span class='fw-medium'>$149.<small>80</small></span></div><a class="btn btn-primary btn-shadow btn-sm" href="#">See offers<i class="ci-arrow-right fs-xs ms-1"></i></a>
+                    <div class="mega-dropdown-column d-none d-lg-block py-4 text-center"><a class="d-block mb-2" href="{{ route('products', $gc->id) }}"><img src="{{asset("category_images/$gc->image")}}" alt="Computers &amp; Accessories" width="100"></a>
+                      {{-- <div class="fs-sm mb-3">Starting from <span class='fw-medium'>$149.<small>80</small></span></div> --}}
+                      <a class="btn btn-primary btn-shadow btn-sm" href="{{ route('products', $gc->id) }}">See Products<i class="ci-arrow-right fs-xs ms-1"></i></a>
                     </div>
 
                   </div>
@@ -147,7 +149,7 @@
                 @endforeach
               </div>
               <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
-                <div class="fs-sm me-2 py-2"><span class="text-muted">Subtotal:</span><span class="text-accent fs-base ms-1">₹{{getCartSubTotal()}}</span></div><a class="btn btn-outline-secondary btn-sm" href="shop-cart.php">Expand cart<i class="ci-arrow-right ms-1 me-n1"></i></a>
+                <div class="fs-sm me-2 py-2"><span class="text-muted">Subtotal:</span><span class="text-accent fs-base ms-1">₹{{getCartSubTotal()}}</span></div><a class="btn btn-outline-secondary btn-sm" href="{{ route('cart') }}">Expand cart<i class="ci-arrow-right ms-1 me-n1"></i></a>
               </div><a class="btn btn-primary btn-sm d-block w-100" href="{{route('checkout-details')}}"><i class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
             </div>
           </div>

@@ -5,10 +5,10 @@
       <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
-            <li class="breadcrumb-item"><a class="text-nowrap" href="index.html"><i class="ci-home"></i>Home</a></li>
-            <li class="breadcrumb-item text-nowrap"><a href="shop-grid-ls.html">Shop</a>
+            <li class="breadcrumb-item"><a class="text-nowrap" href="#"><i class="ci-home"></i>Home</a></li>
+            <li class="breadcrumb-item text-nowrap"><a href="#">Shop</a>
             </li>
-            <li class="breadcrumb-item text-nowrap active" aria-current="page">Checkout</li>
+            <li class="breadcrumb-item text-nowrap active" aria-current="page">Review</li>
           </ol>
         </nav>
       </div>
@@ -104,7 +104,7 @@
         </div>
         <!-- Navigation (desktop)-->
         <div class="d-none d-lg-flex pt-4">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100 checkout-back-bt" href="{{route('checkout-details')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping Details</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn d-block w-100 checkout-back-bt" href="{{route('checkout-details')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping Details</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{ route('checkout-payment') }}"><span class="d-none d-sm-inline">Select Payment Method</span><span class="d-inline d-sm-none">Complete</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
       </section>
@@ -135,7 +135,7 @@
     <div class="row d-lg-none">
       <div class="col-lg-8">
         <div class="d-flex pt-4 mt-3">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="{{ route('checkout-details') }}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping Details</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn checkout-back-bt d-block w-100" href="{{ route('checkout-details') }}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping Details</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{ route('checkout-payment') }}"><span class="d-none d-sm-inline">Select Payment Method</span><span class="d-inline d-sm-none">Complete</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
       </div>

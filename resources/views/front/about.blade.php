@@ -21,6 +21,11 @@
                     <b>Maahir Bharat</b> is  an  Authentic  Indian online platform which brings , spiritual values and purity as core value through the right genuine selections of vendors, product and services to bring back the lost glory.
                 </p>
 
+                <h5>
+                    <b>Business model and services</b>
+                </h5>
+                <p>Maahir Bharat is a platform where we promote finest Indian handicrafts like:Antiques, Art, Baskets, Paper Mache, Ceramics, Embroidery, Block Printing, Decorative Painting, Glass Work, Fabric, Furniture, Gifts, Home Décor, Jewellery, Leather Crafts, Metal Crafts, Paper Crafts, Pottery, Puppets, Stone and Wood Works etc. Before using this platform evey supplier have to fill KYC form. After the fullfill the all necessary requirments, we will allow them to showcase their products on the platform. Buyers who are interested to buy any products avaliable on the platform, can buy any products smoothly with the use of payment gateway. We bring together credible skills of artisans and master craftsmen from every corners of the country and showcase their unique work to the whole world.</p>
+
             </div>
 
         </div>

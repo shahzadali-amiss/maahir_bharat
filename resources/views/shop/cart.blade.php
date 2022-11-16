@@ -1,32 +1,24 @@
 @extends('layouts.home')
 @section('content')
 
-<!-- <div class="breadcrumb-back">
-  <div class="container">
-    <ul class="breadcrumb">
-      <li><a href="https://opencart.mahardhi.com/MT04/noriva/05/index.php?route=common/home">Home</a></li>
-      <li><a href="https://opencart.mahardhi.com/MT04/noriva/05/index.php?route=checkout/cart">Shopping Cart</a></li>
-    </ul>
-  </div>
-</div> -->
-
-<div class="page-title-overlap bg-dark">
-    <div class="container">
-      
-      <nav aria-label="breadcrump">
-        <div class="col-md-12" style="margin-left: -30px;">
-          <div class="breadcrumb-back"><div class="container"><ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
-            <li class="breadcrumb-item"><a class="text-nowrap" href="index.html"><i class="ci-home"></i>Home</a></li>
-            <li class="breadcrumb-item text-nowrap"><a href="shop-grid-ls.html">Shop</a>
-            </li>
-            <li class="breadcrumb-item text-nowrap active" aria-current="page">Shopping Checkout</li>
-          </ol></div></div>
-        </nav>
-      </div>
-
+@include('inc.session-message')
+<div class="page-title-overlap bg-dark pt-4">
+  <div class="container d-lg-flex justify-content-between py-2 py-lg-3 check-out-before">
+    <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+          <li class="breadcrumb-item"><a class="text-nowrap" href="#"><i class="ci-home"></i>Home</a></li>
+          <li class="breadcrumb-item text-nowrap"><a href="#">Shop</a>
+          </li>
+          <li class="breadcrumb-item text-nowrap active" aria-current="page">Cart</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="order-lg-1 pe-lg-4 text-center text-lg-start lg-heading">
+      <h1 class="h3 text-light mb-0">Shoping Cart</h1>
     </div>
   </div>
-
+</div>
 
 <div class="container pb-5 mb-2 mb-md-4">
     <div class="row">
@@ -79,7 +71,8 @@
           
           <h2 class="">Shopping Cart</h2><br>
 
-          <form action="https://opencart.mahardhi.com/MT04/noriva/05/index.php?route=checkout/cart/edit" method="post" enctype="multipart/form-data">
+          {{-- <form action="{{ route('addtocart') }}" method="post" enctype="multipart/form-data">
+            @csrf --}}
               <div class="table-responsive">
                   <table class="table table-bordered">
                       <thead>
@@ -93,6 +86,7 @@
                           </tr>
                       </thead>
                       <tbody>
+                      {{-- {{ dd(getCartProducts()) }} --}}
 
                         @foreach( getCartProducts() as $key => $product )
                           <tr>
@@ -117,13 +111,18 @@
                               --}}
 
                               <td class="text-left">
+                                <form action="{{ route('update-quantity') }}" method="post">
+                                  @csrf
                                   <div class="cart_input_block input-group btn-block" style="max-width: 200px; display: table;">
-                                      <input type="number" name="quantity[{{$key}}]" value="{{ $quantity = getCartProductQuantity($product->id) }}" size="1" class="form-control" style="width: 150px !important">
+                                      <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                      <input type="number" name="quantity" value="{{ $quantity = getCartProductQuantity($product->id) }}" size="1" min="1"class="form-control" style="width: 150px !important">
                                       <span class="input-group-btn">
                                           <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="fa fa-refresh"></i> Update</button>
-                                          <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onclick="cart.remove('37');" data-original-title="Remove"><i class="fa fa-times-circle"></i></button>
+                                          {{-- <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onclick="cart.remove('37');" data-original-title="Remove"><i class="fa fa-times-circle"></i></button> --}}
+                                          <a class="btn btn-danger" href="{{ route('delete-cart-product', $product->id) }}" onclick="return confirm('Are you sure to remove this product?')" aria-label="Remove" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
                                       </span>
                                   </div>
+                                </form>
                               </td>
                               <td class="text-right">₹{{ $product->offer_price }}</td>
                               <td class="text-right">₹{{ $product->offer_price * $quantity }}</td>
@@ -134,12 +133,12 @@
 
                   </table>
               </div>
-          </form>
+          {{-- </form> --}}
         </div>
 
         <!-- Navigation (desktop)-->
         <div class="d-none d-lg-flex pt-4 mt-3">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100 checkout-back-bt" href="http://127.0.0.1:8000/shop/cart"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn btn- d-block w-100 checkout-back-bt" href="http://127.0.0.1:8000/shop/cart"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><a href="{{ route('checkout-details') }}" class="btn btn-primary d-block w-100" onclick=""><span class="d-none d-sm-inline">Proceed to Order Review</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
       </section>
@@ -154,19 +153,19 @@
             </tr>
             <tr>
               <td class="text-left cart-total-title">Sub-Total:</td>
-              <td class="text-right cart-total-price">$105.00</td>
+              <td class="text-right cart-total-price">₹{{getCartSubTotal()}}</td>
             </tr>
-            <tr>
+            {{-- <tr>
               <td class="text-left cart-total-title">Eco Tax (-2.00):</td>
-              <td class="text-right cart-total-price">$2.00</td>
+              <td class="text-right cart-total-price">₹0.00</td>
             </tr>
             <tr>
               <td class="text-left cart-total-title">VAT (20%):</td>
-              <td class="text-right cart-total-price">$21.00</td>
-            </tr>
+              <td class="text-right cart-total-price">₹0.00</td>
+            </tr> --}}
             <tr>
               <th class="text-left cart-total-title">Total:</th>
-              <th class="text-right cart-total-price">$128.00</th>
+              <th class="text-right cart-total-price">₹{{getCartSubTotal()}}</th>
             </tr>
             <tr>
               <td colspan="2">
@@ -187,7 +186,7 @@
     <div class="row d-lg-none">
       <div class="col-lg-8">
         <div class="d-flex pt-4 mt-3">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="http://127.0.0.1:8000/home?shop&amp;cart"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn checkout-back-bt d-block w-100" href="http://127.0.0.1:8000/home?shop&amp;cart"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><button class="btn btn-primary d-block w-100" onclick="jQuery('#address-form').submit();"><span class="d-none d-sm-inline">Proceed to Order Review</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></button></div>
         </div>
       </div>

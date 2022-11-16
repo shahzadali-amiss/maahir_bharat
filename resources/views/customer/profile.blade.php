@@ -33,7 +33,7 @@
       </div>
       <div class="col-sm-6">
         <label class="form-label" for="account-phone">Phone Number</label>
-        <input class="form-control" type="text" id="account-phone" value="{{  Auth::user()->mobile }}">
+        <input class="form-control" name="mobile" type="number" id="account-phone" value="{{  Auth::user()->mobile }}">
       </div>
       <div class="col-sm-12">
         <div class="form-check">

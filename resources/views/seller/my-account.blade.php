@@ -12,7 +12,7 @@ $supplier_details=getSupplierDetails();
     <ul class="nav nav-tabs nav-justified" role="tablist">
 
       <li class="nav-item">
-        <a id="show-suppl" class="nav-link px-0 active" href="#supplier-details" data-bs-toggle="tab" role="tab">
+        <a id="show-suppl" class="nav-link px-0 {{ $typ==null ? 'active':''}}" href="#supplier-details" data-bs-toggle="tab" role="tab">
           <div class="d-none d-lg-block">
             <i class="ci-user opacity-60 me-2"></i>Supplier Details
           </div>
@@ -24,7 +24,7 @@ $supplier_details=getSupplierDetails();
       </li>
 
       <li class="nav-item">
-        <a id="show-gst" class="nav-link px-0" href="#gst-details" 
+        <a id="show-gst" class="nav-link px-0 {{ $typ!=null && $typ=='gst'? 'show active':''}}" href="#gst-details" 
         data-bs-toggle="tab" role="tab">
           <div class="d-none d-lg-block">
             <i class="ci-percent opacity-60 me-2"></i>GST Details
@@ -37,7 +37,7 @@ $supplier_details=getSupplierDetails();
       </li>
 
       <li class="nav-item">
-        <a id="show-store" class="nav-link px-0" href="#pickup-address" data-bs-toggle="tab" role="tab">
+        <a id="show-store" class="nav-link px-0 {{ $typ!=null && $typ=='pickup'? 'show active':''}}" href="#pickup-address" data-bs-toggle="tab" role="tab">
           <div class="d-none d-lg-block">
             <i class="ci-delivery opacity-60 me-2"></i>Store Address
           </div>
@@ -49,7 +49,7 @@ $supplier_details=getSupplierDetails();
       </li>
 
       <li class="nav-item">
-        <a id="show-bank" class="nav-link px-0" href="#bank-details" data-bs-toggle="tab" role="tab">
+        <a id="show-bank" class="nav-link px-0 {{ $typ!=null && $typ=='bank'? 'show active':''}}" href="#bank-details" data-bs-toggle="tab" role="tab">
           <div class="d-none d-lg-block">
             <i class="ci-card opacity-60 me-2"></i>Bank Details
           </div>
@@ -62,19 +62,23 @@ $supplier_details=getSupplierDetails();
 
     </ul>
     <!-- Tab content-->
-    <form action="{{ route('seller-account') }}" method="post" enctype="multipart/form-data">
-    @csrf
+    {{-- <form action="{{ route('seller-account') }}" method="post" enctype="multipart/form-data">
+    @csrf --}}
     <div class="tab-content">
 
       <!-----Supplier Details----->
-      <div class="tab-pane fade show active" id="supplier-details" role="tabpanel">
+
+      <div class="tab-pane fade {{ $typ==null ? 'show active':''}}" id="supplier-details" role="tabpanel">
+        <form action="{{ route('seller-account', 'basic') }}" method="post" enctype="multipart/form-data">
+        @csrf
         <h4 class="text-center">Supplier Details</h4>
         <div class="bg-secondary rounded-3 p-4 mb-4">
           <div class="d-flex align-items-center">
-            @if($supplier_details)
-              <img class="rounded-circle" src="{{ asset('supplier_images') }}/{{ $supplier_details->image }}">
+
+            @if($supplier_details->image)
+              <img class="rounded-circle" src="{{ asset('supplier_images') }}/{{ $supplier_details->image }}" id="output2" width="100">
             @else
-              <img class="" src="{{ asset('images/store_icon.png') }}">
+              <img class="" src="{{ asset('images/store_icon.png') }}" id="output2" width="100">
             @endif
 
             <div class="ps-3">
@@ -104,22 +108,24 @@ $supplier_details=getSupplierDetails();
             <hr class="mt-2 mb-4">
             <div class="mt-3">
               <div class="d-sm-flex justify-content-between align-items-center">
-                <div class="form-check">
-                </div>
-                <a class="btn btn-primary nav-link " href="javascript:void(0)" 
-                onclick="MyFunc('show-gst')">
-                  Next
-                </a>
+                {{-- <div class="form-check">
+                </div> --}}
+                <button type="submit" class="btn btn-primary nav-link mx-auto">
+                  Save and Next
+                </button>
               </div>
             </div>
           </div>
         </div>
+        </form>
       </div>
 
       <!-- GST Details-->
-      <div class="tab-pane fade" id="gst-details" role="tabpanel">
-        <h4 class="text-center">GST Details</h4>
-        <div class="row gx-4 gy-3">
+      <div class="tab-pane fade {{ $typ!=null && $typ=='gst'? 'show active':''}}" id="gst-details" role="tabpanel">
+        <form action="{{ route('seller-account', 'gst') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        <h4 class="text-center ">GST Details</h4>
+        <div class="row gx-4 gy-3 ">
           <div class="col-sm-12 py-4">
             <label class="form-label" for="gst-number">Enter GST Number</label>
             <div class="row mt-2">
@@ -159,17 +165,19 @@ $supplier_details=getSupplierDetails();
                   Previous
                   </a>
                 </div>
-                <a class="btn btn-primary nav-link " href="javascript:void(0)" 
-                onclick="MyFunc('show-store')">
-                  Next
-                </a>
+                <button class="btn btn-primary nav-link">
+                  Save & Next 
+                </button>
               </div>
             </div>
         </div>
+        </form>
       </div>
 
       <!-- Pickup Address-->
-      <div class="tab-pane fade" id="pickup-address" role="tabpanel">
+      <div class="tab-pane fade {{ $typ!=null && $typ=='pickup'? 'show active':''}}" id="pickup-address" role="tabpanel">
+        <form action="{{ route('seller-account', 'pickup') }}" method="post" enctype="multipart/form-data">
+        @csrf
         <h4 class="text-center">Pickup Address</h4>
         <div class="row gx-4 gy-3">
           <div class="col-sm-12 pt-4">         
@@ -207,17 +215,23 @@ $supplier_details=getSupplierDetails();
                   Previous
                   </a>
                 </div>
-                <a class="btn btn-primary nav-link " href="javascript:void(0)" 
+                {{-- <a class="btn btn-primary nav-link " href="javascript:void(0)" 
                 onclick="MyFunc('show-bank')">
-                  Next
-                </a>
+                  Save & Next
+                </a> --}}
+                <button class="btn btn-primary nav-link " type="submit">
+                  Save & Next
+                </button>
               </div>
             </div>
         </div>
+        </form>
       </div>
      
       <!-- Bank Details-->
-      <div class="tab-pane fade" id="bank-details" role="tabpanel">
+      <div class="tab-pane fade {{ $typ!=null && $typ=='bank'? 'show active':''}}" id="bank-details" role="tabpanel">
+        <form action="{{ route('seller-account', 'bank') }}" method="post" enctype="multipart/form-data">
+        @csrf
         <h4 class="text-center">Bank Details</h4>
         <div class="row gx-4 gy-3">
           <div class="col-sm-12 pt-4">         
@@ -249,13 +263,14 @@ $supplier_details=getSupplierDetails();
                   <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policies</a>
                 </label>
               </div>
-              <button id="form-submit" class="btn btn-primary mt-3 mt-sm-0" type="Submit" disabled>Save changes</button>
+              <button id="form-submit" class="btn btn-primary mt-3 mt-sm-0" type="Submit" disabled>Save Details</button>
             </div>
         </div>
+        </form>
       </div>
 
     </div>
-    </form>
+    {{-- </form> --}}
   </div>
 </section>
 @endsection

@@ -6,7 +6,7 @@ $supplier_details=getSupplierDetails();
     <div class="d-flex align-items-center pb-3">
       <div class="img-thumbnail rounded-circle position-relative flex-shrink-0" style="width: 6.375rem;">
       
-        @if($supplier_details)
+        @if($supplier_details->image)
           <img class="rounded-circle" src="{{ asset('supplier_images') }}/{{ $supplier_details->image }}">
         @else
           <img class="rounded-circle" src="{{ asset('images/store_icon.png') }}">

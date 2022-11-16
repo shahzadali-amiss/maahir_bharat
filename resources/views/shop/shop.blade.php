@@ -35,7 +35,7 @@
 									@if(count($parents->where('parent_id', $grand->id)) >0)	
 										<ul class="list-unstyled child-categories group">
 											@foreach($parents as $pr)
-                                                @if($pr->parent_id == $grand->id)
+												@if($pr->parent_id == $grand->id)
 													<li>
 														<a href="{{ route('products', [$grand->id,$pr->id]) }}"
 															class="list-group-item">&nbsp;&nbsp;&nbsp; {{ $pr->name }}</a>
@@ -147,9 +147,9 @@
 									<p class="price">
 										₹{{ $product->offer_price }}
 										<span class="section-sale" style="color: green">
-                                                  @php $decount = 100 * ($product->mrp - $product->offer_price) / $product->mrp; @endphp
-                                                  {{ (integer) $decount }}% off
-                                                </span>
+                      @php $decount = 100 * ($product->mrp - $product->offer_price) / $product->mrp; @endphp
+                      {{ (integer) $decount }}% off
+                    </span>
 									</p>
 									<div class="rating">
 										<span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i

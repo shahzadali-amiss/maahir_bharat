@@ -25,11 +25,15 @@ class HomeController extends Controller
     public function index(Request $request){
         if($request->isMethod('get')){
             $data = $this->getAllData();
-            // dd($request);
             $data['page'] = 'Profile';
             return view('customer.profile', $data);
         }else{
-            
+            // dd($request->all());
+            if($request->has('mobile')){
+                $request->validate([
+                    'mobile' => 'required|numeric|digits:10',
+                ]);
+            }               
             if($request->has('password')){
                 $request->validate([
                     'password' => ['required', Rules\Password::defaults()],
@@ -44,6 +48,9 @@ class HomeController extends Controller
             if($user){
                 if(!is_null($request->email)){
                     $user->email=$request->email;
+                }
+                if($request->has('mobile')){
+                    $user->mobile = $request->mobile;
                 }
                 if($request->has('password')){
                     $user->password = Hash::make($request->password);
@@ -147,19 +154,35 @@ class HomeController extends Controller
             
         }
     }
+    public function updateQuantity(Request $request){
+        // dd($request->all()); 
+        $res = false;
+        $order = Order::where("user_id", Auth::user()->id)->where("product_id", $request->product_id)->get()->first();
+        if($order!=null && $order->id>0){
+            $order->quantity = $request->quantity;
+            $res = $order->save();
+        }
+        // dd($order);
+        if($res){
+            return back()->with('success', 'Cart Updated');
+        }else{
+            return back()->with("error", "Something went wrong !");
+        }
+
+    }
 
     public function cart(Request $request){
         if($request->isMethod('get')){
             $data = $this->getAllData();
             return view('shop.cart', $data);  
         }else{
+            // dd($request->all());
             if($request->has('quantity')){
                 $request->validate([
                     'quantity.*' => 'required|numeric|min:1|max:5',
                 ]);
                 // dd($request->all());
                 
-
                 foreach ($request->quantity as $key => $q) {
                     foreach (getCartProducts() as $index => $p) {
                         if($key==$index){    
@@ -358,11 +381,13 @@ class HomeController extends Controller
     }
 
     public function deleteCartProduct($id){
-        $order=Order::where([ 'user_id' => Auth::user()->id, 'is_in_cart' => true, 'product_id' => $id ])->first();
+        // dd($id);
+        $order=Order::visitor(request())->where('is_in_cart', true)->where('product_id', $id)->first();
         if($order->delete()){
             return back()->with('success', 'Product removed from cart successfully');
         }else{
             return back()->with('error', 'Something went wrong! Please try again');
         }
     }
+
 }

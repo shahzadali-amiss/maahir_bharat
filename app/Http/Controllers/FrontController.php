@@ -16,6 +16,7 @@ use App\Models\City;
 use App\Models\Supplier;
 use App\Models\Attribute_value;
 use App\Models\Product_attribute;
+use App\Models\Review;
 // use App\Models\ProductAttributeValue;
 use Illuminate\Validation\Rules;
 use App\Models\OTP;
@@ -27,7 +28,7 @@ class FrontController extends Controller
 {
 
     public function sellerStore($role_id){
-        $data['products'] = Product::where(['status' => 1, 'role_id' => $role_id])->orderBy('id', 'desc')->paginate(10);
+        $data['products'] = Product::where(['status' => 1, 'role_id' => $role_id])->orderBy('id', 'desc')->paginate(12);
         return view('seller.products')->with($data);
     }
 
@@ -338,9 +339,22 @@ class FrontController extends Controller
         // dd($id);
         if($id){
 
-            $product =  Product::with('supplier')->find($id);
-            // dd($product);
+            $product =  Product::with('supplier', 'reviews')->find($id);
+            // dd($product->reviews);
+            $totalRating = $product->reviews!=null && count($product->reviews)>0 ? $product->reviews : [];
+            if($totalRating!=null){
+                $subTotalOfRating = 0;
+                foreach($totalRating as $r){
+                    $subTotalOfRating += $r->rating;
+                }
+                $baseRating = $subTotalOfRating / count($totalRating);                           
+            $data['baseRating']=$baseRating;
+            }
+            else{
+               $data['baseRating']=$baseRating= []; 
+            }
             $data['product']=$product;
+
             $data['product_attributes']=getProductAttributes($id);
             
             // dd($data['product_attributes']);
@@ -387,4 +401,29 @@ class FrontController extends Controller
         return view('shop.shop')->with($data);
        
     }
+
+    public function review(Request $request){
+        // dd($request->all());
+        $request->validate([
+            'name' => 'required',
+            'role_id' => 'required',
+            'rating' => 'required',
+            'product_id' => 'required',
+        ]);
+        $review = new Review();
+
+        $review->name = $request->name;
+        $review->role_id = $request->role_id;
+        $review->product_id = $request->product_id;
+        $review->rating = $request->rating;
+        $review->review = $request->review;
+
+        if ($review->save()) {
+            return back()->with('success', 'Your Review Sent Successfully');
+        }else
+            return backa()->with('error', 'Something went wrong !');
+    }
+
+
+
 }

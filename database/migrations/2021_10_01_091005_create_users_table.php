@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->enum('role', ['s', 'c', 'a']);
+            $table->enum('role', ['s', 'c', 'a'])->default('c');
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('mobile')->nullable();

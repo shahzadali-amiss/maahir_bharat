@@ -5,10 +5,10 @@
       <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
         <nav aria-label="breadcrump">
           <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
-            <li class="breadcrumb-item"><a class="text-nowrap" href="index.html"><i class="ci-home"></i>Home</a></li>
-            <li class="breadcrumb-item text-nowrap"><a href="shop-grid-ls.html">Shop</a>
+            <li class="breadcrumb-item"><a class="text-nowrap" href="#"><i class="ci-home"></i>Home</a></li>
+            <li class="breadcrumb-item text-nowrap"><a href="#">Shop</a>
             </li>
-            <li class="breadcrumb-item text-nowrap active" aria-current="page">Checkout</li>
+            <li class="breadcrumb-item text-nowrap active" aria-current="page">Shiping</li>
           </ol>
         </nav>
       </div>
@@ -135,7 +135,7 @@
           <div class="col-sm-6">
             <div class="mb-3">
               <label class="form-label" for="checkout-state">State</label>
-              <select class="form-select" id="checkout-state" name="state" required="" style="font-size:unset;">
+              <select class="form-select" id="checkout-state" name="state" onchange="getCity(this)" required="" style="font-size:unset;">
                 <option value="">Select state</option>
                 {{-- <option value="1">test state</option> --}}
                 @foreach($states as $state)
@@ -148,8 +148,7 @@
             <div class="mb-3">
               <label class="form-label" for="checkout-city">City</label>
               <select class="form-select" id="checkout-city" name="city" required="" style="font-size:unset;">
-                <option value="">Select city</option>
-                <option value="1">mzn</option> 
+                {{-- <option value="">Select city</option> --}}
                 @if(isset($address))
                   <option value="{{$address->city}}" selected>{{ucwords(getCityName($address->city))}}</option>
                 @endif
@@ -193,7 +192,7 @@
         </div> -->
         <!-- Navigation (desktop)-->
         <div class="d-none d-lg-flex pt-4 mt-3">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100 checkout-back-bt" href="{{route('cart')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn d-block w-100 checkout-back-bt" href="{{route('cart')}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><button class="btn btn-primary d-block w-100" onclick="jQuery('#address-form').submit();"><span class="d-none d-sm-inline">Proceed to Order Review</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></button></div>
         </div>
       </section>
@@ -234,7 +233,7 @@
     <div class="row d-lg-none">
       <div class="col-lg-8">
         <div class="d-flex pt-4 mt-3">
-          <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="{{route('home',['shop','cart'])}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
+          <div class="w-50 pe-3"><a class="btn checkout-back-bt d-block w-100" href="{{route('home',['shop','cart'])}}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
           <div class="w-50 ps-2"><button class="btn btn-primary d-block w-100" onclick="jQuery('#address-form').submit();"><span class="d-none d-sm-inline">Proceed to Order Review</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></button></div>
         </div>
       </div>
@@ -244,40 +243,23 @@
 @endsection
 @push('styles')
   <style type="text/css">
-/*    .breadcrumb-back {
-        background: #373f50!important;
-        margin: 0 0 20px 0;
-        padding: 20px 0;
-    }
-      .check-out-before::before{
-          content: none !important;
-          display: none !important;
-        }
-        #lg-heading{
-          flex: auto;
-        }
-        @media (min-width: 500PX ){
-          #lg-heading{
-              padding-top: 20px;           
-          }
-        }*/
+
   </style>
 @endpush
 @push('scripts')
   <script type="text/javascript">
-  jQuery(document).ready(function($){
-    $('#checkout-state').on('change', function(){
-      if($(this).val() != ""){
-        var url = '/api/get-cities-from-state/'+($(this).val());
+    function getCity(ele){
+      console.log("fatching city of "+ele.value);
+      if(ele.value != ""){
+        var url = '/api/get-cities-from-state/'+(ele.value);
         $.get(url, function(data, status){
           if(data.status==true){
-            
-            console.log(data.data);
+
             bindParentCategory(data.data,'checkout-city');
           }    
         });
       }
-    });
+    }
 
     function bindParentCategory(data, element){  
       var sel=document.getElementById(element);
@@ -288,7 +270,7 @@
       // opt.setAttribute('data-display', 'Please Select');
       sel.appendChild(opt);
 
-          //console.log(data.length);
+      // console.log(data.length);
       // ITERATE TO BIND OPTIONS
       for(var i = 0; i < data.length; i++) {
           var opt = document.createElement('option');
@@ -297,6 +279,6 @@
           sel.appendChild(opt);
       }
     }
-  });
+
   </script>
 @endpush

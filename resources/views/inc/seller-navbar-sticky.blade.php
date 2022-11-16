@@ -34,7 +34,7 @@
       <div class="navbar-tool dropdown ms-2">
         <a class="navbar-tool-icon-box border dropdown-toggle" href="#" style="overflow: hidden;">
           
-          @if($supplier_details)
+          @if($supplier_details->image)
             <img class="rounded-circle" src="{{ asset('supplier_images') }}/{{ $supplier_details->image }}">
           @else
             <img class="rounded-circle" src="{{ asset('images/store_icon.png') }}">
