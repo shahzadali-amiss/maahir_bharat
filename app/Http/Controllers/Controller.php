@@ -57,14 +57,14 @@ class Controller extends BaseController
         if($product){
             date_default_timezone_set("Asia/Calcutta");
             $product->deleted_at = date('Y-m-d H:i:s');
-            // $images=Image::where(['type' => 'p', 'type_id' => $id])->get();
-            // if($images){
-            //     foreach ($images as $image) {
-            //         unlink(public_path('product_images/'.$image->image));
-            //         $image->delete();
-            //     }
-            // }
-            if($product->update()){
+            $images=Image::where(['type' => 'p', 'type_id' => $id])->get();
+            if($images){
+                foreach ($images as $image) {
+                    unlink(public_path('product_images/'.$image->image));
+                    $image->delete();
+                }
+            }
+            if($product->delete()){
                 return back()->with('success', 'Product deleted');
             }else{
                 return back()->with('error', 'Something went wrong! Please try again');
